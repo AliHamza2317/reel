@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NuovaDev reel 2 — Before you build your app</title>
+<script src="timeline.js"></script>
+<style>
+@font-face{font-family:'Poppins';font-weight:600;src:url(../video/assets/fonts/poppins-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Poppins';font-weight:700;src:url(../video/assets/fonts/poppins-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Poppins';font-weight:800;src:url(../video/assets/fonts/poppins-latin-800-normal.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-weight:400;src:url(../video/assets/fonts/inter-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-weight:500;src:url(../video/assets/fonts/inter-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-weight:600;src:url(../video/assets/fonts/inter-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'JB';font-weight:400;src:url(../video/assets/fonts/jetbrains-mono-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'JB';font-weight:500;src:url(../video/assets/fonts/jetbrains-mono-latin-500-normal.woff2) format('woff2')}
+
+/* Tokens copied from the website's styles/globals.css. */
+:root{
+  --ink:#0e1117; --body:#4b5361; --faint:#68717f; --coral:#f0562e; --coral-i:#cc4622; --amber:#ff9a3d; --peach:#ffe1d3;
+  --soft:#f6f7f9; --soft2:#eef0f4; --line:#e9ebf0; --line2:#dfe2e9; --green:#2fb85f;
+  --ink-raise:#171b22; --ink-line:#262b34; --ink-line2:#3a414d; --ink-tile:#1f2430; --on-ink:#9aa2ae;
+  --grad:linear-gradient(100deg,#f0562e,#ff9a3d);
+  --shadow-soft:0 30px 70px -32px rgb(14 17 23 / .28); --shadow-coral:0 14px 30px -12px rgb(240 86 46 / .65);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--ink)}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Inter,sans-serif;color:#fff}
+.layer{position:absolute;inset:0;pointer-events:none}
+.scene{position:absolute;inset:0;display:none}
+.abs{position:absolute}
+svg{display:block}
+.g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.dotc{color:var(--coral)}
+.mono{font-family:JB;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
+
+/* worlds */
+#inkWorld{background:radial-gradient(60% 40% at 88% 8%,rgba(240,86,46,.16),transparent 70%),radial-gradient(60% 35% at 5% 100%,rgba(255,154,61,.08),transparent 70%),var(--ink)}
+#lightWorld{background:#fff;clip-path:circle(0% at 50% 45%)}
+#lightWorld .grid{position:absolute;inset:0;background-image:linear-gradient(#eef0f4 2px,transparent 2px),linear-gradient(90deg,#eef0f4 2px,transparent 2px);background-size:96px 96px;-webkit-mask-image:radial-gradient(75% 45% at 50% 28%,#000 25%,transparent 80%)}
+#lightWorld .blobs{position:absolute;inset:0;background:radial-gradient(40% 24% at 96% 10%,rgba(255,154,61,.42),transparent 70%),radial-gradient(34% 20% at 82% 22%,rgba(240,86,46,.20),transparent 70%),radial-gradient(55% 26% at -5% 92%,rgba(255,225,211,.95),transparent 70%)}
+
+/* on-screen headline overlays */
+.ov{position:absolute;left:72px;right:72px;top:236px;font-family:Poppins;font-weight:800;letter-spacing:-0.035em;line-height:1.04;font-size:92px;display:none;z-index:30}
+.ov.light{color:var(--ink)} .ov.dark{color:#fff}
+.ov .ln{display:block;white-space:nowrap}
+
+/* captions */
+#cap{position:absolute;left:50px;right:50px;top:1296px;text-align:center;z-index:40}
+#cap .box{display:inline-block;padding:16px 30px 18px;border-radius:22px;background:rgba(14,17,23,.86);font:600 50px Inter;color:#fff;letter-spacing:-0.012em;line-height:1.18;box-shadow:0 14px 34px -14px rgba(0,0,0,.5)}
+#cap .k{color:var(--amber)}
+
+/* ink UI */
+.ipanel{position:absolute;background:var(--ink-raise);border:2px solid var(--ink-line);border-radius:28px;overflow:hidden;box-shadow:0 60px 120px -50px rgba(0,0,0,.9)}
+.ihead{height:86px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-bottom:2px solid #20252e;background:#14181f}
+.ihead .t{font:600 32px Poppins;color:#fff}
+.ihead .m{font:500 24px JB;letter-spacing:.1em;color:var(--amber)}
+.irow{height:66px;display:flex;align-items:center;gap:20px;padding:0 32px;border-bottom:1.5px solid #1e232b;font:500 29px Inter;color:#e6e9ee;white-space:nowrap}
+.cb{width:30px;height:30px;border-radius:8px;border:2.5px solid #4b5361;flex:none}
+.chip{font:500 20px JB;letter-spacing:.08em;padding:5px 12px;border-radius:8px;background:rgba(240,86,46,.14);color:#ff9a3d;margin-left:auto}
+
+/* phones */
+.phone{position:absolute;border-radius:76px;background:#0b0d11;padding:15px;box-shadow:0 0 0 2px #2b313d,0 70px 120px -50px rgba(14,17,23,.75)}
+.phone .scr{position:relative;width:100%;height:100%;border-radius:62px;overflow:hidden;background:#fff}
+.phone .isl{position:absolute;top:16px;left:50%;width:150px;height:42px;margin-left:-75px;border-radius:24px;background:#000;z-index:5}
+.urlpill{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);padding:12px 28px;border-radius:40px;background:rgba(246,247,249,.94);border:1.5px solid #e2e5eb;font:500 24px Inter;color:#0e1117;display:flex;gap:10px;align-items:center;z-index:6;white-space:nowrap}
+.tap{position:absolute;width:90px;height:90px;margin:-45px 0 0 -45px;border-radius:50%;background:rgba(240,86,46,.25);border:3px solid rgba(240,86,46,.9);z-index:8;opacity:0}
+
+/* light UI cards */
+.lcard{position:absolute;background:#fff;border:2px solid var(--line);border-radius:26px;box-shadow:var(--shadow-soft)}
+.eyeb{font:500 22px JB;letter-spacing:.16em;color:var(--coral-i);display:flex;align-items:center;gap:14px;text-transform:uppercase}
+.eyeb::before{content:'';width:36px;height:2px;background:var(--coral-i)}
+.lrow{display:flex;align-items:center;gap:16px;font:500 29px Inter;color:var(--ink);height:52px;white-space:nowrap}
+.ck{width:34px;height:34px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;flex:none}
+.x{width:34px;height:34px;border-radius:50%;border:2.5px solid var(--line2);flex:none}
+.struck{color:#9aa2ae;text-decoration:line-through;text-decoration-thickness:2.5px}
+
+/* prototype app (fictional) */
+.app{position:absolute;inset:0;background:#fff;color:var(--ink);font-family:Inter}
+.app .sb{height:70px}
+.app h3{font:700 54px Poppins;letter-spacing:-0.02em;padding:22px 36px 0}
+.app .sub{font:500 22px JB;letter-spacing:.1em;color:var(--faint);padding:8px 36px 18px;text-transform:uppercase}
+.task{margin:0 22px 16px;height:92px;border-radius:22px;background:var(--soft);border:2px solid var(--soft2);display:flex;align-items:center;gap:16px;padding:0 20px;font:500 25px Inter;white-space:nowrap;overflow:hidden}
+.task .box{width:38px;height:38px;border-radius:12px;border:3px solid #c3c8d2;flex:none;display:flex;align-items:center;justify-content:center}
+.task.done .box{background:var(--grad);border-color:transparent}
+.fab{position:absolute;left:26px;right:26px;bottom:110px;height:92px;border-radius:46px;background:var(--ink);color:#fff;font:600 30px Inter;display:flex;align-items:center;justify-content:center;gap:12px}
+.sheet{position:absolute;left:0;right:0;bottom:0;height:520px;background:#fff;border-radius:40px 40px 0 0;box-shadow:0 -20px 60px -20px rgba(14,17,23,.3);padding:20px 30px;z-index:4}
+.sheet .grab{width:80px;height:8px;border-radius:4px;background:var(--line2);margin:0 auto 26px}
+.sheet .lab{font:500 22px JB;letter-spacing:.1em;color:var(--faint);margin-bottom:12px}
+.sheet .inp{height:92px;border-radius:20px;border:2.5px solid var(--ink);display:flex;align-items:center;padding:0 24px;font:500 30px Inter;color:var(--ink);white-space:nowrap;overflow:hidden}
+.sheet .add{margin-top:28px;height:92px;border-radius:46px;background:var(--ink);color:#fff;font:600 30px Inter;display:flex;align-items:center;justify-content:center}
+.caret{display:inline-block;width:3px;height:34px;background:var(--coral);margin-left:3px;vertical-align:middle}
+
+/* steps */
+.steps{position:absolute;left:60px;right:60px;top:250px;display:flex;align-items:center;justify-content:center;gap:12px;z-index:30;display:none}
+.step{padding:16px 26px;border-radius:100px;font:600 36px Poppins;letter-spacing:-0.01em;border:2.5px solid var(--line2);color:#9aa2ae;background:#fff}
+.step.on{background:var(--grad);border-color:transparent;color:#fff;box-shadow:var(--shadow-coral)}
+.step.past{background:var(--ink);border-color:transparent;color:#fff}
+.arr{font:600 34px Inter;color:#c3c8d2}
+
+/* brand */
+.lockup{display:flex;align-items:center;gap:20px;font:800 64px Poppins;letter-spacing:-0.03em;color:var(--ink);white-space:nowrap}
+.btn{display:inline-flex;align-items:center;gap:18px;padding:30px 64px;border-radius:120px;background:var(--coral-i);color:#fff;font:700 62px Poppins;letter-spacing:-0.02em;box-shadow:var(--shadow-coral);white-space:nowrap}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="layer" id="inkWorld"></div>
+  <div class="layer" id="lightWorld"><div class="grid"></div><div class="blobs"></div></div>
+
+  <!-- ============ S1 · hook: the build estimate ============ -->
+  <div class="scene" id="s1">
+    <div class="layer" style="z-index:2;background:linear-gradient(180deg,rgba(14,17,23,.95) 0%,rgba(14,17,23,.75) 26%,transparent 44%)"></div>
+    <div class="layer" id="s1cam" style="transform-origin:540px 900px">
+      <div class="abs" style="left:-80px;top:1500px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(255,154,61,.35),transparent 65%);filter:blur(30px)"></div>
+      <div class="abs" style="left:860px;top:380px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(240,86,46,.28),transparent 65%);filter:blur(30px)"></div>
+      <div class="ipanel" id="est" style="left:90px;top:560px;width:900px;height:860px;transform:perspective(1800px) rotateY(-9deg) rotateX(5deg)">
+        <div class="ihead"><span class="t">Build estimate · Product v3</span><span class="m">DRAFT</span></div>
+        <div id="estRows"></div>
+        <div id="estTotal" style="position:absolute;left:0;right:0;bottom:0;padding:26px 32px 30px;background:#1b2029;border-top:2px solid var(--ink-line)">
+          <div style="display:flex;justify-content:space-between;font:500 30px Inter;color:#9aa2ae"><span>Estimated build</span><span style="color:#fff;font-weight:600">9 months</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;font:500 30px Inter;color:#9aa2ae"><span>Budget</span><span style="font:700 56px Poppins;color:#fff;filter:blur(15px)">€ 86,400</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ S2 · the unvalidated idea ============ -->
+  <div class="scene" id="s2">
+    <div class="layer" id="s2cam" style="transform-origin:540px 960px">
+      <div class="abs" id="paper" style="left:70px;top:470px;width:940px;height:1000px;border-radius:14px;background:#f3efe6;box-shadow:0 50px 100px -40px rgba(0,0,0,.9);transform:rotate(-3deg)">
+        <div class="layer" style="background:repeating-linear-gradient(0deg,transparent 0 58px,rgba(110,130,170,.18) 58px 60px);border-radius:14px"></div>
+      </div>
+      <div class="phone" id="wfPhone" style="left:290px;top:500px;width:500px;height:940px;opacity:0;background:#0b0d11"><div class="scr" style="background:#151a22"></div></div>
+      <svg class="layer" id="sk" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+      <svg class="abs" id="cur2" width="46" height="46" viewBox="0 0 24 24" style="opacity:0"><path d="M4 2l15 9-6.5 1.6L9 19z" fill="#fff" stroke="#0e1117" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      <div class="layer" id="s2dim" style="background:radial-gradient(60% 40% at 50% 52%,transparent 35%,rgba(5,6,9,.75) 100%);opacity:0"></div>
+    </div>
+  </div>
+
+  <!-- ============ S3 · the costly mistake ============ -->
+  <div class="scene" id="s3">
+    <div class="layer" id="s3a">
+      <div class="ipanel" style="left:100px;top:520px;width:880px;height:740px">
+        <div class="ihead"><span class="t">Backlog · v1</span><span class="m" id="blCount">0 FEATURES</span></div>
+        <div style="position:absolute;top:86px;left:0;right:0;bottom:0;overflow:hidden"><div id="blRows"></div></div>
+      </div>
+    </div>
+    <div class="layer" id="s3b">
+      <div id="board" class="abs" style="left:60px;top:520px;width:960px;height:760px;display:flex;gap:22px;transform:perspective(1600px) rotateY(14deg) rotateX(4deg);transform-origin:20% 50%"></div>
+    </div>
+    <div class="layer" id="s3c">
+      <div class="abs mono" style="left:0;right:0;top:600px;text-align:center;font-size:30px;color:#9aa2ae">Development</div>
+      <div class="abs" id="monthTxt" style="left:0;right:0;top:650px;text-align:center;font:700 150px Poppins;letter-spacing:-0.03em;color:#fff">Month 1</div>
+      <div class="abs" id="monthGrid" style="left:170px;top:900px;width:740px;display:grid;grid-template-columns:repeat(6,1fr);gap:18px"></div>
+    </div>
+    <div class="layer" id="s3d">
+      <div class="abs mono" style="left:110px;top:760px;font-size:30px;color:#9aa2ae">Budget</div>
+      <div class="abs" style="left:110px;top:820px;width:740px;height:56px;border-radius:28px;background:#1f2430;border:2px solid var(--ink-line)"></div>
+      <div class="abs" id="budFill" style="left:110px;top:820px;height:56px;border-radius:28px;background:var(--grad);box-shadow:0 0 50px rgba(240,86,46,.45)"></div>
+      <div class="abs" style="left:848px;top:790px;width:3px;height:116px;background:#9aa2ae"></div>
+      <div class="abs mono" style="left:790px;top:930px;font-size:22px;color:#9aa2ae">Planned</div>
+    </div>
+    <div class="layer" id="s3e"></div>
+  </div>
+
+  <!-- ============ S4 · the MVP ============ -->
+  <div class="scene" id="s4">
+    <div class="lcard" id="vcard" style="left:120px;top:520px;width:840px;padding:34px 40px">
+      <div class="eyeb" id="vEyeb">Backlog</div>
+      <div id="vRows" style="margin-top:18px"></div>
+      <div id="vLater" style="margin-top:18px;display:inline-block;padding:12px 24px;border-radius:100px;background:var(--soft);border:2px solid var(--line);font:500 26px Inter;color:var(--body)">+ 35 features can wait</div>
+    </div>
+    <div class="abs mono" id="protoLab" style="left:0;right:0;top:420px;text-align:center;font-size:20px;color:#9aa2ae">Illustrative prototype</div>
+    <div class="phone" id="p4" style="left:320px;top:462px;width:440px;height:920px"><div class="scr"><div class="isl"></div><div class="app" id="app4"></div></div></div>
+  </div>
+
+  <!-- ============ S5 · build → test → learn → improve ============ -->
+  <div class="scene" id="s5">
+    <div class="phone" id="p5" style="left:110px;top:470px;width:430px;height:900px"><div class="scr"><div class="isl"></div><div class="app" id="app5"></div></div></div>
+    <div class="lcard" id="fb" style="left:590px;top:600px;width:420px;padding:30px 30px 20px">
+      <div class="eyeb" style="font-size:20px">Feedback</div>
+      <div id="fbRows" style="margin-top:16px"></div>
+    </div>
+  </div>
+
+  <!-- ============ S6 · NuovaDev ============ -->
+  <div class="scene" id="s6">
+    <div class="abs" id="lock6" style="left:0;right:0;top:300px;display:flex;justify-content:center"><div class="lockup"><img src="assets/logo-mark.png" style="width:84px;height:66px"><span>Nuova<span class="g">Dev</span></span></div></div>
+    <div class="phone" id="p6" style="left:290px;top:440px;width:500px;height:1080px"><div class="scr"><div class="isl"></div><img id="siteMvp" src="assets/site-mvp.png" style="position:absolute;left:0;top:0;width:100%"><div class="urlpill"><svg width="20" height="20" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2" fill="#0e1117"/><path d="M8 10V7a4 4 0 018 0v3" fill="none" stroke="#0e1117" stroke-width="2.4"/></svg>nuovadev.com</div></div></div>
+    <div id="cards6"></div>
+  </div>
+
+  <!-- ============ S7 · CTA ============ -->
+  <div class="scene" id="s7">
+    <div class="abs" id="slogan" style="left:0;right:0;top:640px;text-align:center;font-family:Poppins;font-weight:800;letter-spacing:-0.035em;color:var(--ink)">
+      <div id="sl1" style="font-size:86px;line-height:1.05">Don't just build more.</div>
+      <div id="sl2" style="font-size:132px;line-height:1.1;margin-top:10px"><span class="g">Build smarter</span><span class="dotc">.</span></div>
+    </div>
+    <div class="phone" id="p7" style="left:280px;top:330px;width:520px;height:1120px"><div class="scr"><div class="isl"></div><img id="siteContact" src="assets/site-contact.png" style="position:absolute;left:0;top:0;width:100%"><div class="urlpill"><svg width="20" height="20" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2" fill="#0e1117"/><path d="M8 10V7a4 4 0 018 0v3" fill="none" stroke="#0e1117" stroke-width="2.4"/></svg>nuovadev.com/contact</div><div class="tap" id="tap7"></div></div></div>
+    <div id="end">
+      <div class="abs" id="eLock" style="left:0;right:0;top:300px;display:flex;justify-content:center"><div class="lockup" style="font-size:58px"><img src="assets/logo-mark.png" style="width:76px;height:60px"><span>Nuova<span class="g">Dev</span></span></div></div>
+      <div class="abs" id="eEyeb" style="left:0;right:0;top:470px;display:flex;justify-content:center"><div class="eyeb" style="font-size:24px">Free 30-minute consultation</div></div>
+      <div class="abs" id="eHead" style="left:0;right:0;top:530px;text-align:center;font:800 94px Poppins;letter-spacing:-0.035em;line-height:1.04;color:var(--ink)">Ready to <span class="g">validate</span><br>your idea<span class="dotc">?</span></div>
+      <div class="abs" id="eSub" style="left:0;right:0;top:770px;text-align:center;font:500 44px Inter;color:var(--body)">Book your free 30-minute consultation.</div>
+      <div class="abs" id="eBtn" style="left:0;right:0;top:870px;display:flex;justify-content:center"><div class="btn">nuovadev.com<svg width="50" height="50" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+      <div class="abs mono" id="eNote" style="left:0;right:0;top:1052px;text-align:center;font-size:24px;color:var(--faint)">Pick a slot · 30 minutes · No obligation</div>
+    </div>
+  </div>
+
+  <!-- overlays & captions -->
+  <div id="ovs"></div>
+  <div class="steps" id="steps"><span class="step" id="st0">Build</span><span class="arr">→</span><span class="step" id="st1">Test</span><span class="arr">→</span><span class="step" id="st2">Learn</span><span class="arr">→</span><span class="step" id="st3">Improve</span></div>
+  <div id="cap"></div>
+  <div class="layer" id="grain" style="opacity:.05;mix-blend-mode:overlay;z-index:50"></div>
+  <div class="layer" id="vig" style="background:radial-gradient(90% 70% at 50% 45%,transparent 55%,rgba(0,0,0,.42) 100%);z-index:49"></div>
+</div>
+
+<script>
+/* ===================== helpers ===================== */
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const lerp = (a, b, x) => a + (b - a) * x;
+const eo = x => 1 - Math.pow(1 - x, 3);
+const eio = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const eb = x => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+function appear(el, t, a, d = .35, y = 30, s0 = 1, x = 0) {
+  const p = prog(t, a, a + d), e = eo(p), s = s0 === 1 ? 1 : lerp(s0, 1, eb(p));
+  el.style.opacity = e; el.style.transform = `translate(${(1 - e) * x}px,${(1 - e) * y}px) scale(${s})`;
+  return e;
+}
+const typed = (s, t, a, b) => s.slice(0, Math.round(s.length * prog(t, a, b)));
+// every beat is anchored to the narration timeline in timeline.js
+const CH = TL.chunks;
+const ct = txt => CH.find(c => c.text.startsWith(txt)).t0;
+const wt = (txt, word) => CH.find(c => c.text.startsWith(txt)).words.find(w => w.text.startsWith(word)).t0;
+const SC = Object.fromEntries(TL.scenes.map(s => ['s' + s.scene, s]));
+const CHECK = '<svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+/* ===================== overlays (on-screen text) ===================== */
+const OVS = [
+  { a: 0, b: SC.s1.end, inAt: 0, cls: 'dark', size: 112, top: 250, lines: ["Don't build <span class='g'>yet</span><span class='dotc'>.</span>"] },
+  { a: ct('But have you'), b: SC.s2.end, inAt: ct('But have you'), cls: 'dark', size: 80, lines: ["Great idea ≠", "<span class='g'>validated</span> idea<span class='dotc'>.</span>"] },
+  { a: SC.s3.start + .45, b: ct('And one question'), inAt: SC.s3.start + .45, cls: 'dark', size: 80, lines: ["More features.", "More <span class='g'>uncertainty</span><span class='dotc'>.</span>"] },
+  { a: ct('Build only'), b: SC.s4.end, inAt: ct('Build only'), cls: 'light', size: 80, lines: ["One problem.", "One <span class='g'>focused MVP</span><span class='dotc'>.</span>"] },
+];
+OVS.forEach(o => {
+  const el = document.createElement('div'); el.className = 'ov ' + o.cls; el.style.fontSize = o.size + 'px'; if (o.top) el.style.top = o.top + 'px';
+  el.innerHTML = o.lines.map(l => `<span class="ln">${l}</span>`).join(''); $('ovs').appendChild(el); o.el = el;
+});
+// scene 6 overlay: three phrases that light up with "focused scope / clear milestones / every two weeks"
+const ov6 = document.createElement('div'); ov6.className = 'ov light'; ov6.style.fontSize = '78px';
+ov6.innerHTML = `<span class="ln"><span id="o6a">Your idea.</span> <span id="o6b">A clear plan.</span></span><span class="ln" id="o6c"><span class="g">Working software</span><span class="dotc">.</span></span>`;
+$('ovs').appendChild(ov6);
+
+/* ===================== captions ===================== */
+const HIDE_CAPS = new Set(["Don't just build more.", 'Build smarter.']); // the slogan is set as on-screen type instead
+function renderCaptions(t) {
+  let cur = null;
+  for (let i = 0; i < CH.length; i++) {
+    const c = CH[i], next = CH[i + 1];
+    const end = next ? Math.min(c.t1 + .45, next.t0) : TL.total;
+    if (t >= c.t0 - .04 && t < end) cur = c;
+  }
+  const el = $('cap');
+  if (!cur || HIDE_CAPS.has(cur.text)) { el.innerHTML = ''; return; }
+  if (el.dataset.k !== cur.text) {
+    el.dataset.k = cur.text;
+    el.innerHTML = '<span class="box">' + cur.words.map(w => w.key ? `<span class="k">${w.text}</span>` : w.text).join(' ').replace(' — ', ' — ') + '</span>';
+  }
+  const fade = cur === CH[CH.length - 1] ? 1 - prog(t, TL.total - .35, TL.total) : 1;
+  el.style.opacity = eo(prog(t, cur.t0 - .04, cur.t0 + .08)) * fade;
+}
+
+/* ===================== S1 build estimate ===================== */
+const EST = [['iOS & Android apps', 'v1'], ['Web dashboard', 'v1'], ['Admin panel', 'v1'], ['Chat & messaging', 'v1'], ['AI recommendations', 'v1'], ['Payments & subscriptions', 'v1'], ['Referral program', 'v1'], ['Multi-language', 'v1'], ['Gamification', 'v1']];
+$('estRows').innerHTML = EST.map(r => `<div class="irow"><span class="cb"></span>${r[0]}<span class="chip">${r[1]}</span></div>`).join('');
+
+/* ===================== S2 sketch → wireframe ===================== */
+const NS = 'http://www.w3.org/2000/svg';
+const sv = (tag, at, parent) => { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); parent && parent.appendChild(e); return e; };
+// phone-relative geometry shared by the pencil sketch and the digital wireframe
+const PX = 290 + 15, PY = 500 + 15; // screen origin of the wireframe phone
+const SHAPES = [
+  ['rect', { x: -15, y: -15, width: 500, height: 940, rx: 70 }],
+  ['rect', { x: 40, y: 90, width: 220, height: 34, rx: 8 }],
+  ['circle', { cx: 400, cy: 107, r: 26 }],
+  ['rect', { x: 40, y: 170, width: 390, height: 230, rx: 22 }],
+  ['rect', { x: 40, y: 430, width: 390, height: 80, rx: 16 }],
+  ['rect', { x: 40, y: 530, width: 390, height: 80, rx: 16 }],
+  ['rect', { x: 40, y: 630, width: 390, height: 80, rx: 16 }],
+  ['rect', { x: 40, y: 780, width: 390, height: 84, rx: 42 }],
+];
+const NOTES = [ // scribbled margin notes + arrows (sketch only)
+  'M120,700 C150,640 220,640 250,700', 'M60,760 q20,-18 40,0 t40,0 t40,0 t40,0', 'M60,800 q20,-18 40,0 t40,0 t40,0',
+  'M830,720 C880,700 930,720 950,760', 'M830,800 q20,-18 40,0 t40,0 t40,0', 'M830,840 q20,-18 40,0 t40,0',
+  'M90,1180 q22,-20 44,0 t44,0 t44,0 t44,0', 'M90,1222 q22,-20 44,0 t44,0 t44,0', 'M860,1100 C900,1150 930,1200 920,1260',
+  'M840,1300 q22,-20 44,0 t44,0 t44,0',
+];
+const skG = sv('g', { fill: 'none', stroke: '#2b313d', 'stroke-width': 4.5, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, $('sk'));
+const sketchEls = [];
+SHAPES.forEach(([tag, at]) => {
+  const a = { ...at }; if (a.x !== undefined) { a.x += PX; a.y += PY; } else { a.cx += PX; a.cy += PY; }
+  const e = sv(tag, a, skG); sketchEls.push(e);
+});
+NOTES.forEach(d => sketchEls.push(sv('path', { d, 'stroke-width': 3.5, stroke: '#46607f' }, skG)));
+const wfG = sv('g', { opacity: 0 }, $('sk'));
+SHAPES.slice(1).forEach(([tag, at], i) => {
+  const a = { ...at }; if (a.x !== undefined) { a.x += PX; a.y += PY; } else { a.cx += PX; a.cy += PY; }
+  a.fill = i === 6 ? '#3a414d' : '#262b34'; sv(tag, a, wfG);
+});
+const wfBtnLabel = sv('text', { x: PX + 235, y: PY + 834, 'text-anchor': 'middle', fill: '#c9cfd8', 'font-family': 'Inter', 'font-weight': 600, 'font-size': 30 }, wfG); wfBtnLabel.textContent = 'Sign up';
+
+/* ===================== S3 ===================== */
+const FEATS = ['Sign up & login', 'Social login', 'User profiles', 'Dark mode', 'In-app chat', 'Push notifications', 'AI recommendations', 'Referral program', 'Admin dashboard', 'Analytics', 'Multi-language', 'Gamification', 'Payments', 'Subscriptions', 'Calendar sync', 'File uploads', 'Team workspaces', 'Comments', 'Activity feed', 'Search', 'Offline mode', 'Integrations', 'Custom themes', 'Video calls', 'Badges', 'Leaderboards', 'Export to PDF', 'Two-factor auth', 'Roles & permissions', 'Public API', 'Marketplace', 'Widgets', 'Voice notes', 'Smart reminders', 'Templates', 'Tags', 'Bulk edit', 'Audit log'];
+$('blRows').innerHTML = FEATS.map(f => `<div class="irow"><span class="cb"></span>${f}<span class="chip">v1</span></div>`).join('');
+const blRows = [...$('blRows').children];
+$('board').innerHTML = ['To do', 'In progress', 'Done'].map((c, i) => `<div style="flex:1;background:#151920;border:2px solid var(--ink-line);border-radius:24px;padding:24px 20px;overflow:hidden"><div class="mono" style="font-size:22px;color:#9aa2ae;margin-bottom:18px">${c}</div><div id="col${i}"></div></div>`).join('');
+const cardHtml = w => `<div style="height:74px;border-radius:16px;background:#262c38;border:2px solid #3a414d;margin-bottom:14px;padding:18px 18px"><div style="height:12px;width:${w}%;border-radius:6px;background:#68717f"></div><div style="height:10px;width:${w * .6}%;border-radius:5px;background:#4b5361;margin-top:12px"></div></div>`;
+$('col0').innerHTML = [80, 64, 90, 70, 58, 85, 66, 74, 92, 60].map(cardHtml).join('');
+$('col1').innerHTML = [72, 88, 60].map(cardHtml).join('');
+$('col2').innerHTML = `<div class="mono" style="font-size:20px;color:#4b5361;padding-top:20px">Nothing shipped yet</div>`;
+$('monthGrid').innerHTML = Array.from({ length: 12 }, (_, i) => `<div class="mc" style="height:96px;border-radius:16px;background:#1f2430;border:2px solid var(--ink-line);display:flex;align-items:center;justify-content:center;font:500 22px JB;color:#68717f">${i + 1}</div>`).join('');
+const monthCells = [...document.querySelectorAll('.mc')];
+// S3e: a fan of mockups, then one lonely "Launch" screen
+const FAN = [[-26, -300, 40], [-13, -150, 10], [0, 0, 0], [13, 150, 10], [26, 300, 40]];
+$('s3e').innerHTML = FAN.map(([r, x, y], i) => `<div class="phone fan" style="left:${355 + x}px;top:${560 + y}px;width:370px;height:780px;border-radius:58px;padding:12px;transform:rotate(${r}deg);transform-origin:50% 120%"><div class="scr" style="border-radius:46px;background:#151a22">
+  ${i === 2 ? `<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px"><div style="font:700 44px Poppins;color:#fff">Product v3</div><div id="launchBtn" style="padding:22px 56px;border-radius:50px;background:var(--grad);font:600 32px Inter;color:#fff">Launch</div></div>`
+    : `<div style="padding:70px 28px">${[90, 60, 75, 50, 80, 65].map(w => `<div style="height:56px;border-radius:14px;background:#1f2430;margin-bottom:16px;width:${w}%"></div>`).join('')}</div>`}</div></div>`).join('');
+const fans = [...document.querySelectorAll('.fan')];
+
+/* ===================== prototype app (fictional, S4/S5) ===================== */
+function appHtml(id) {
+  return `<div class="sb"></div><h3>Today</h3><div class="sub">Illustrative app</div>
+  <div id="${id}List"><div class="task" id="${id}New" style="opacity:0;height:0;margin-bottom:0"><span class="box"></span><span id="${id}NewTxt">Send investor update</span></div>
+  <div class="task"><span class="box"></span>Book venue for launch</div><div class="task"><span class="box"></span>Review pricing page</div></div>
+  <div class="fab" id="${id}Fab"><span style="font-size:40px;line-height:0">+</span> New task</div>
+  <div class="sheet" id="${id}Sheet"><div class="grab"></div><div class="lab">NEW TASK</div><div class="inp" id="${id}Inp"></div>
+  <div id="${id}Rem" style="display:none;margin-top:18px;height:74px;border-radius:18px;border:3px solid var(--coral);display:flex;align-items:center;justify-content:space-between;padding:0 22px;font:500 28px Inter;color:var(--ink)"><span>Remind me</span><span style="width:76px;height:42px;border-radius:21px;background:var(--grad);position:relative"><i style="position:absolute;right:5px;top:5px;width:32px;height:32px;border-radius:50%;background:#fff"></i></span></div>
+  <div class="add">Add task</div></div><div class="tap" id="${id}Tap"></div>`;
+}
+$('app4').innerHTML = appHtml('a4'); $('app5').innerHTML = appHtml('a5');
+$('a4Rem').style.display = 'none';
+const V1 = ['Create a task', 'Track progress', 'Get a reminder'];
+const LATER = ['In-app chat', 'AI recommendations', 'Referral program', 'Gamification', 'Leaderboards', 'Video calls', 'Marketplace'];
+$('vRows').innerHTML = [...V1.map(v => [v, 1]), ...LATER.map(v => [v, 0])].sort((a, b) => (FEATS.indexOf(a[0]) - FEATS.indexOf(b[0]))).map(([v, keep]) => `<div class="lrow vr" data-keep="${keep}"><span class="${keep ? 'ck' : 'x'}">${keep ? CHECK : ''}</span><span class="vt">${v}</span></div>`).join('');
+// interleave so the cut feels like a real backlog: keepers spread among the rest
+(() => { const rows = [...document.querySelectorAll('.vr')]; const order = [3, 0, 4, 5, 1, 6, 7, 2, 8, 9]; const box = $('vRows'); order.forEach(i => rows[i] && box.appendChild(rows[i])); })();
+const vRows = [...document.querySelectorAll('.vr')];
+$('fbRows').innerHTML = [['ok', 'Added a task unaided'], ['ok', 'Came back to tick it off'], ['warn', "Couldn't find reminders"]].map(([k, s], i) => `<div class="lrow fbr" id="fb${i}" style="height:auto;padding:10px 0;font-size:25px;white-space:normal;line-height:1.25"><span class="${k === 'ok' ? 'ck' : 'x'}" style="${k === 'warn' ? 'border-color:#ff9a3d;color:#ff9a3d;font:700 22px Inter;display:flex;align-items:center;justify-content:center' : ''}">${k === 'ok' ? CHECK : '!'}</span><span>${s}</span></div>`).join('');
+
+/* ===================== S6 cards ===================== */
+$('cards6').innerHTML = `
+<div class="lcard" id="c6a" style="left:72px;top:520px;width:936px;height:236px;padding:28px 34px">
+  <div class="eyeb">Focused scope</div>
+  <div style="display:flex;gap:40px;margin-top:14px">
+    <div style="flex:1">${V1.map(v => `<div class="lrow" style="height:46px;font-size:26px"><span class="ck" style="width:30px;height:30px">${CHECK}</span>${v}</div>`).join('')}</div>
+    <div style="flex:1">${['In-app chat', 'AI recommendations', 'Gamification'].map(v => `<div class="lrow struck" style="height:46px;font-size:26px"><span class="x" style="width:30px;height:30px"></span>${v}</div>`).join('')}</div>
+  </div></div>
+<div class="lcard" id="c6b" style="left:72px;top:778px;width:936px;height:206px;padding:28px 34px">
+  <div class="eyeb">Clear milestones</div>
+  <div style="position:relative;margin-top:30px;height:104px">
+    <div style="position:absolute;left:12.5%;right:12.5%;top:15px;height:4px;border-radius:2px;background:var(--line)"></div>
+    <div id="msFill" style="position:absolute;left:12.5%;top:15px;height:4px;border-radius:2px;background:var(--grad);width:0"></div>
+    <div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,1fr)">${['Cut', 'Prototype', 'Build', 'Launch & learn'].map(m => `<div style="display:flex;flex-direction:column;align-items:center"><span class="ms" style="width:34px;height:34px;border-radius:50%;background:#fff;border:3px solid var(--line2)"></span><span style="font:600 27px Inter;color:var(--ink);margin-top:14px;white-space:nowrap">${m}</span></div>`).join('')}</div>
+  </div></div>
+<div class="lcard" id="c6c" style="left:72px;top:1006px;width:936px;height:236px;padding:28px 34px">
+  <div class="eyeb">Working software every two weeks</div>
+  <div style="display:flex;gap:16px;margin-top:26px">${[2, 4, 6, 8].map(w => `<div class="wk" style="flex:1;border-radius:20px;border:2px solid var(--line);background:var(--soft);padding:18px 18px"><div style="font:500 20px JB;letter-spacing:.1em;color:var(--faint)">WEEK ${w}</div><div style="font:600 25px Inter;color:var(--ink);margin-top:8px;display:flex;align-items:center;gap:8px">Open build<svg width="22" height="22" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="#cc4622" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>`).join('')}</div>
+</div>`;
+const wks = [...document.querySelectorAll('.wk')];
+const mss = [...document.querySelectorAll('.ms')];
+
+/* ===================== grain ===================== */
+(() => { const c = document.createElement('canvas'); c.width = 360; c.height = 640; const x = c.getContext('2d'); const img = x.createImageData(360, 640); let s = 99991;
+  for (let i = 0; i < img.data.length; i += 4) { s = (s * 1103515245 + 12345) & 0x7fffffff; const v = s % 256; img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255; }
+  x.putImageData(img, 0, 0); $('grain').style.backgroundImage = `url(${c.toDataURL()})`; $('grain').style.backgroundSize = '720px 1280px'; })();
+
+/* ===================== scene renderers ===================== */
+function tap(el, t, at, x, y) { const p = prog(t, at, at + .45); el.style.left = x + 'px'; el.style.top = y + 'px'; el.style.opacity = p > 0 && p < 1 ? 1 - p : 0; el.style.transform = `scale(${lerp(.4, 1.3, eo(p))})`; }
+
+const R = {
+  s1(t) {
+    const p = eio(prog(t, 0, SC.s1.end));
+    $('s1cam').style.transform = `translate(${lerp(-70, -95, p)}px,${lerp(-410, -470, p)}px) scale(${lerp(1.26, 1.36, p)})`;
+    const rows = [...$('estRows').children];
+    rows.forEach((r, i) => r.style.filter = `blur(${clamp((9 - i) * .9, 0, 6)}px)`); // shallow depth of field: focus on the totals
+  },
+  s2(t) {
+    const a = SC.s2.start, mc = ct('But have you') - .25; // match cut from pencil to pixels
+    const draw = prog(t, a + .05, mc - .2);
+    sketchEls.forEach((e, i) => { const L = e.getTotalLength(); e.setAttribute('stroke-dasharray', L); e.setAttribute('stroke-dashoffset', L * (1 - clamp(draw * sketchEls.length / 6 - i * .55))); });
+    const cut = prog(t, mc, mc + .22);
+    $('paper').style.opacity = 1 - cut; skG.style.opacity = 1 - cut; wfG.setAttribute('opacity', cut); $('wfPhone').style.opacity = cut;
+    const push = eio(prog(t, mc, SC.s2.end));
+    $('s2cam').style.transform = `translateY(${lerp(60, 0, eio(prog(t, a, mc)))}px) scale(${lerp(1, 1.1, push)})`;
+    const c = $('cur2'); const cp = eio(prog(t, mc + .3, wt('that people', 'actually') - .1));
+    c.style.opacity = cut; c.style.left = lerp(820, PX + 300, cp) + 'px'; c.style.top = lerp(1300, PY + 822, cp) + 'px';
+    $('s2dim').style.opacity = .9 * eio(prog(t, wt('that people', 'actually'), wt('that people', 'actually') + .8));
+  },
+  s3(t) {
+    const tB = ct('before getting') + .3, tC = ct('Months'), tD = ct('A growing'), tE = ct('And one');
+    const vis = (id, a, b) => { $(id).style.display = t >= a && t < b ? 'block' : 'none'; };
+    vis('s3a', SC.s3.start, tB); vis('s3b', tB, tC); vis('s3c', tC, tD); vis('s3d', tD, tE); vis('s3e', tE, SC.s3.end);
+    // a. backlog fills up
+    const n = Math.floor(clamp((t - SC.s3.start - .1) / .07, 0, FEATS.length));
+    blRows.forEach((r, i) => { r.style.opacity = i < n ? 1 : 0; });
+    $('blRows').style.transform = `translateY(${-Math.max(0, n - 10) * 66}px)`;
+    $('blCount').textContent = n + ' FEATURES';
+    // b. board: over-the-shoulder lateral move, To-do keeps growing
+    const pb = prog(t, tB, tC); $('board').style.transform = `perspective(1600px) rotateY(${lerp(16, 8, pb)}deg) rotateX(4deg) translateX(${lerp(40, -30, pb)}px)`;
+    [...$('col0').children].forEach((c, i) => c.style.opacity = i < 4 + Math.floor(pb * 8) ? 1 : 0);
+    // c. months tick by
+    const pc = prog(t, tC + .05, tD - .2); const m = 1 + Math.floor(pc * 8.999);
+    $('monthTxt').textContent = 'Month ' + m;
+    monthCells.forEach((c, i) => { const on = i < m; c.style.background = on ? 'rgba(240,86,46,.85)' : '#1f2430'; c.style.color = on ? '#fff' : '#68717f'; c.style.borderColor = on ? 'transparent' : '#262b34'; });
+    // d. budget overruns its plan
+    $('budFill').style.width = lerp(260, 900, eio(prog(t, tD + .05, tE - .1))) + 'px';
+    // e. a fan of screens collapses to a single, silent launch
+    const q = wt('will anyone', 'will');
+    fans.forEach((f, i) => { const k = i === 2; const sp = eo(prog(t, tE, tE + .4)); const out = k ? 0 : eio(prog(t, q - .1, q + .5));
+      const [r, x, y] = FAN[i]; f.style.opacity = (k ? 1 : sp) * (1 - out) * (k ? 1 : .85);
+      f.style.transform = `rotate(${r * sp * (1 - out)}deg) translateX(${(-x * (1 - sp)) + (x * .3 * out)}px) translateY(${out * 60}px)`; });
+    const glow = t > q ? .5 + .5 * Math.sin((t - q) * 4) : 0; const lb = $('launchBtn'); if (lb) lb.style.boxShadow = `0 0 ${20 + 40 * glow}px rgba(240,86,46,${.3 + .4 * glow})`;
+  },
+  s4(t) {
+    const a = SC.s4.start, demo = ct('Build only') - .1;
+    // the backlog is cut down to version one
+    const cutA = a + .55, cutB = ct('Start with') + 1.1;
+    const keepIdx = vRows.filter(r => r.dataset.keep === '1');
+    vRows.forEach((r, i) => { const keep = r.dataset.keep === '1'; const p = keep ? 0 : eio(prog(t, cutA + i * .05, cutA + .35 + i * .05));
+      r.querySelector('.vt').className = 'vt' + (!keep && t > cutA + i * .05 - .15 ? ' struck' : ''); r.style.opacity = 1 - p; r.style.height = lerp(52, 0, keep ? 0 : eio(prog(t, cutB - .3, cutB + .15))) + 'px'; });
+    $('vEyeb').textContent = t < cutB - .1 ? 'Backlog' : 'Version one';
+    $('vLater').style.opacity = eo(prog(t, cutB, cutB + .3));
+    const out = eio(prog(t, demo - .3, demo + .15));
+    $('vcard').style.opacity = 1 - out; $('vcard').style.transform = `translateX(${-200 * out}px) scale(${1 - .1 * out})`;
+    // the focused prototype: one job, done well
+    const pIn = eo(prog(t, demo - .1, demo + .35)); const p4 = $('p4'); p4.style.opacity = pIn; p4.style.transform = `translateY(${(1 - pIn) * 120}px) scale(${lerp(1, 1.04, eio(prog(t, demo, SC.s4.end)))})`;
+    $('protoLab').style.opacity = pIn;
+    runApp('a4', t, { fab: demo + .35, type: [demo + .65, demo + 1.55], add: demo + 1.8, done: wt('one real', 'one') + .05 });
+  },
+  s5(t) {
+    const b = [SC.s5.start, wt('of real users', 'real') - .2, ct('Learn'), ct('Improve')];
+    ['st0', 'st1', 'st2', 'st3'].forEach((id, i) => { const el = $(id); const on = t >= b[i] && (i === 3 || t < b[i + 1]); el.className = 'step' + (on ? ' on' : t >= b[i] ? ' past' : '');
+      el.style.transform = `scale(${on ? lerp(1.12, 1, eo(prog(t, b[i], b[i] + .25))) : 1})`; });
+    // Build: screen assembles
+    const app = $('app5'); [...app.querySelectorAll('h3,.sub,.task,.fab')].forEach((el, i) => { if (el.id === 'a5New') return; const e = appear(el, t, b[0] + i * .07, .3, 26); });
+    // Test: someone taps through it
+    [[b[1] + .05, 200, 714], [b[1] + .4, 220, 266], [b[1] + .75, 69, 266]].forEach(([at, x, y], i) => { if (t >= at && t < at + .45) tap($('a5Tap'), t, at, x, y); });
+    if (t < b[1] || t > b[1] + 1.3) $('a5Tap').style.opacity = 0;
+    $('a5Sheet').style.transform = `translateY(${t >= b[3] ? lerp(100, 0, eo(prog(t, b[3], b[3] + .3))) : 100}%)`;
+    $('a5Inp').innerHTML = t >= b[3] ? 'Book venue for launch' : '';
+    $('a5Rem').style.display = t >= b[3] + .25 ? 'flex' : 'none';
+    if (t >= b[3] + .25) appear($('a5Rem'), t, b[3] + .25, .3, 0, .85);
+    // Learn: feedback lands; Improve: the gap is closed
+    const fb = $('fb'); const fbIn = eo(prog(t, b[2] - .05, b[2] + .3)); fb.style.opacity = fbIn; fb.style.transform = `translateX(${(1 - fbIn) * 80}px)`;
+    [0, 1, 2].forEach(i => appear($('fb' + i), t, b[2] + .1 + i * .15, .25, 14));
+    const fixed = t >= b[3] + .5; const w = $('fb2'); w.querySelector('span:last-child').textContent = fixed ? 'Found reminders' : "Couldn't find reminders";
+    const icon = w.querySelector('span'); icon.className = fixed ? 'ck' : 'x'; icon.innerHTML = fixed ? CHECK : '!'; icon.style.cssText = fixed ? '' : 'border-color:#ff9a3d;color:#ff9a3d;font:700 22px Inter;display:flex;align-items:center;justify-content:center';
+    $('p5').style.transform = `scale(${lerp(1, 1.03, prog(t, SC.s5.start, SC.s5.end))})`;
+  },
+  s6(t) {
+    const a = SC.s6.start, cardsAt = ct('with a focused') - .05;
+    appear($('lock6'), t, wt('At NuovaDev', 'NuovaDev') - .1, .4, 20); if (t > cardsAt - .4) $('lock6').style.opacity = 1 - prog(t, cardsAt - .4, cardsAt - .1);
+    const pIn = eo(prog(t, a, a + .45)), pOut = eio(prog(t, cardsAt - .45, cardsAt));
+    const p6 = $('p6'); p6.style.opacity = pIn * (1 - pOut); p6.style.transform = `translateY(${(1 - pIn) * 100 + pOut * 160}px) scale(${lerp(1, 1.05, eio(prog(t, a, cardsAt)))})`;
+    $('siteMvp').style.transform = `translateY(${-lerp(0, 150, eio(prog(t, a + .6, cardsAt - .5)))}px)`;
+    const tA = cardsAt, tB = ct('clear milestones') - .05, tC = ct('and working') - .05;
+    appear($('c6a'), t, tA, .4, 50); appear($('c6b'), t, tB, .4, 50); appear($('c6c'), t, tC, .4, 50);
+    const msP = eio(prog(t, tB + .2, tB + 1.0)); $('msFill').style.width = (msP * 75) + '%';
+    mss.forEach((m, i) => { const on = msP >= i / 3 - .01; m.style.background = on ? '#f0562e' : '#fff'; m.style.borderColor = on ? '#f0562e' : '#dfe2e9'; });
+    const ew = ['every', 'two', 'weeks.'].map(w => wt('every two', w));
+    wks.forEach((k, i) => { const at = [ew[0] - .1, ew[1] - .1, ew[2] - .1, ew[2] + .15][i]; const on = t >= at;
+      k.style.borderColor = on ? '#f0562e' : '#e9ebf0'; k.style.background = on ? '#fff' : '#f6f7f9'; k.style.transform = `scale(${on ? lerp(1.08, 1, eo(prog(t, at, at + .25))) : 1})`; });
+    // overlay phrases light in step with the cards
+    ov6.style.display = t >= tA ? 'block' : 'none';
+    [['o6a', tA], ['o6b', tB], ['o6c', tC]].forEach(([id, at]) => { $(id).style.opacity = .16 + .84 * eo(prog(t, at, at + .3)); });
+  },
+  s7(t) {
+    const a = SC.s7.start, phoneAt = ct('Book a free') - .15, endAt = ct("Let's figure") - .15;
+    const sl = $('slogan'); sl.style.display = t < phoneAt ? 'block' : 'none';
+    appear($('sl1'), t, ct("Don't just") - .05, .35, 30); appear($('sl2'), t, ct('Build smarter') - .05, .4, 0, .8);
+    const p7 = $('p7'); const pin = eo(prog(t, phoneAt, phoneAt + .4)), pout = eio(prog(t, endAt - .35, endAt));
+    p7.style.display = t >= phoneAt && t < endAt ? 'block' : 'none'; p7.style.opacity = pin * (1 - pout); p7.style.transform = `translateY(${(1 - pin) * 120}px)`;
+    $('siteContact').style.transform = `translateY(${-lerp(0, 600, eio(prog(t, phoneAt + .35, phoneAt + 1.25)))}px)`;
+    const tapAt = phoneAt + 1.55; tap($('tap7'), t, tapAt, 245, 567);
+    const end = $('end'); end.style.display = t >= endAt ? 'block' : 'none';
+    [['eLock', 0], ['eEyeb', .1], ['eHead', .18], ['eSub', .32], ['eBtn', .45], ['eNote', .58]].forEach(([id, d]) => appear($(id), t, endAt + d, .4, 24, id === 'eBtn' ? .9 : 1));
+  },
+};
+function runApp(id, t, k) {
+  tap($(id + 'Tap'), t, k.fab, 205, 734);
+  const sheetUp = eo(prog(t, k.fab + .15, k.fab + .45)), sheetDown = eio(prog(t, k.add + .1, k.add + .4));
+  $(id + 'Sheet').style.transform = `translateY(${lerp(100, 0, sheetUp) + sheetDown * 100}%)`;
+  $(id + 'Inp').innerHTML = typed('Send investor update', t, k.type[0], k.type[1]) + (t > k.type[0] - .1 && t < k.add ? '<span class="caret"></span>' : '');
+  if (t >= k.add && t < k.add + .45) tap($(id + 'Tap'), t, k.add, 205, 624);
+  const nw = $(id + 'New'); const ni = eo(prog(t, k.add + .3, k.add + .6));
+  nw.style.opacity = ni; nw.style.height = lerp(0, 92, ni) + 'px'; nw.style.marginBottom = lerp(0, 16, ni) + 'px'; nw.style.borderColor = ni > 0 && t < k.done + .6 ? '#f0562e' : '';
+  const done = t >= k.done; nw.classList.toggle('done', done); nw.querySelector('.box').innerHTML = done ? CHECK : '';
+  if (done) { nw.querySelector('.box').style.transform = `scale(${lerp(.6, 1, eb(prog(t, k.done, k.done + .3)))})`; $(id + 'NewTxt').style.color = '#9aa2ae'; }
+  else $(id + 'NewTxt').style.color = '';
+}
+
+/* ===================== frame ===================== */
+function render(t) {
+  for (const k in R) { const s = SC[k], on = t >= s.start && t < s.end; $(k).style.display = on ? 'block' : 'none'; if (on) R[k](t); }
+  // ink → light: the clutter clears into the website's own light world
+  const rev = eio(prog(t, SC.s4.start + .05, SC.s4.start + .75));
+  $('lightWorld').style.clipPath = `circle(${rev * 130}% at 50% 42%)`;
+  $('vig').style.opacity = lerp(1, .35, rev);
+  for (const o of OVS) { const on = t >= o.a && t < o.b; o.el.style.display = on ? 'block' : 'none'; if (!on) continue;
+    if (o.inAt === 0) { o.el.style.opacity = 1; o.el.style.transform = `scale(${lerp(1.05, 1, eo(prog(t, 0, .6)))})`; o.el.style.transformOrigin = '0 0'; } else appear(o.el, t, o.inAt, .35, 18); }
+  if (t < SC.s6.start || t >= SC.s6.end) ov6.style.display = 'none';
+  $('steps').style.display = t >= SC.s5.start && t < SC.s5.end ? 'flex' : 'none';
+  renderCaptions(t);
+  const f = Math.floor(t * 30); $('grain').style.backgroundPosition = `${(f * 137) % 720}px ${(f * 251) % 1280}px`;
+  $('grain').style.opacity = lerp(.06, .035, rev);
+}
+const FONT_LOADS = ['600 40px Poppins', '700 40px Poppins', '800 40px Poppins', '400 40px Inter', '500 40px Inter', '600 40px Inter', '400 40px JB', '500 40px JB'];
+window.ready = Promise.all(FONT_LOADS.map(f => document.fonts.load(f))).then(() => document.fonts.ready)
+  .then(() => Promise.all([...document.images].map(i => i.decode()))).then(() => { render(0); return true; });
+window.render = render;
+</script>
+</body>
+</html>
