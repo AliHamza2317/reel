@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NuovaDev reel</title>
+<style>
+@font-face{font-family:'Poppins';font-weight:600;src:url(assets/fonts/poppins-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Poppins';font-weight:700;src:url(assets/fonts/poppins-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Poppins';font-weight:800;src:url(assets/fonts/poppins-latin-800-normal.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-weight:400;src:url(assets/fonts/inter-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-weight:500;src:url(assets/fonts/inter-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-weight:600;src:url(assets/fonts/inter-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'JB';font-weight:400;src:url(assets/fonts/jetbrains-mono-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'JB';font-weight:500;src:url(assets/fonts/jetbrains-mono-latin-500-normal.woff2) format('woff2')}
+
+/* Brand tokens taken from the NuovaDev site (styles/globals.css). */
+:root{
+  --ink:#0e1117; --raise:#171b22; --tile:#1f2430; --line:#262b34; --line2:#3a414d;
+  --coral:#f0562e; --amber:#ff9a3d; --grad:linear-gradient(100deg,#f0562e,#ff9a3d);
+  --muted:#8b93a3; --soft:#c9cfd8; --green:#2fb85f;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#0b0e13}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Inter,sans-serif;color:#fff;background:#0b0e13}
+.layer{position:absolute;inset:0;pointer-events:none}
+.scene{position:absolute;inset:0;display:none;transform-origin:50% 48%}
+.abs{position:absolute}
+svg{display:block}
+
+/* ---------- headlines (kinetic captions) ---------- */
+.hl{position:absolute;left:72px;right:72px;top:275px;font-family:Poppins;font-weight:700;letter-spacing:-0.025em;line-height:1.08;display:none;z-index:20}
+.hl.center{text-align:center}
+.hl .ln{display:block;white-space:nowrap}
+.k-grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.eb{position:absolute;left:72px;top:206px;font-family:JB;font-weight:500;font-size:27px;letter-spacing:.16em;color:var(--muted);display:none;z-index:20;white-space:nowrap}
+.eb.amber{color:#1a1206;background:var(--amber);padding:6px 16px;border-radius:10px;top:198px;letter-spacing:.12em}
+.eb.brand{color:var(--amber)}
+
+/* ---------- phone ---------- */
+.phone{position:absolute;left:240px;width:600px;height:1260px;border-radius:86px;background:#05070a;border:12px solid #1d222b;box-shadow:0 0 0 2px #2b313d,0 70px 140px -50px rgba(0,0,0,.9);overflow:hidden}
+.screen{position:absolute;inset:0;border-radius:74px;overflow:hidden}
+.screen.cool{background:radial-gradient(120% 70% at 50% 0%,#253048 0%,#121824 55%,#0a0d13 100%)}
+.screen.warm{background:radial-gradient(120% 70% at 50% 0%,#4a2a22 0%,#1d1716 55%,#0d0b0b 100%)}
+.island{position:absolute;top:22px;left:50%;width:170px;height:46px;margin-left:-85px;border-radius:30px;background:#000;z-index:3}
+.ls-date{position:absolute;top:118px;width:100%;text-align:center;font:500 30px Inter;color:rgba(255,255,255,.72)}
+.ls-time{position:absolute;top:142px;width:100%;text-align:center;font-family:Poppins;font-weight:600;font-size:176px;letter-spacing:-0.03em;color:rgba(255,255,255,.93);line-height:1.1}
+.notifs{position:absolute;top:410px;left:20px;right:20px;height:900px}
+.notif{position:absolute;left:0;right:0;height:132px;border-radius:34px;background:rgba(62,68,82,.78);padding:20px 22px;display:flex;gap:18px;align-items:flex-start;box-shadow:0 10px 30px -10px rgba(0,0,0,.5)}
+.notif.glow{box-shadow:0 0 0 2px rgba(255,255,255,.18),0 0 60px rgba(150,180,255,.25)}
+.notif.glow-warm{box-shadow:0 0 0 2px rgba(255,154,61,.7),0 0 70px rgba(240,86,46,.45);background:rgba(70,52,46,.85)}
+.nicon{width:60px;height:60px;border-radius:15px;flex:none;display:flex;align-items:center;justify-content:center}
+.nicon svg{width:34px;height:34px}
+.nbody{flex:1;min-width:0}
+.nrow{display:flex;justify-content:space-between;font:500 22px Inter;color:rgba(255,255,255,.6)}
+.ntitle{font:600 27px Inter;color:#fff;margin-top:1px}
+.ntext{font:400 25px Inter;color:rgba(255,255,255,.8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+
+/* ---------- desktop windows ---------- */
+.win{position:absolute;left:72px;width:936px;border-radius:28px;background:#141820;border:1.5px solid var(--line);box-shadow:0 50px 100px -45px rgba(0,0,0,.95);overflow:hidden}
+.bar{height:66px;display:flex;align-items:center;gap:12px;padding:0 28px;border-bottom:1.5px solid #20252e;background:#11151b}
+.dot{width:16px;height:16px;border-radius:50%;background:#353b47}
+.ttl{margin-left:16px;font:500 24px Inter;color:var(--muted)}
+.mailhead{padding:30px 36px 8px}
+.mailrow{font:500 25px Inter;color:var(--muted);margin-bottom:10px}
+.mailrow b{color:#e6e9ee;font-weight:600}
+.mailsub{font:600 36px Poppins;color:#fff;margin:14px 0 6px;letter-spacing:-0.01em}
+.mailbody{padding:16px 36px 30px;font:400 34px Inter;color:#d5d9e0;line-height:1.55}
+.mailbody .sl{display:block;width:fit-content;border-radius:4px}
+.key{position:absolute;font:600 36px Inter;padding:14px 24px;border-radius:16px;background:#232935;border:1.5px solid #3a414d;box-shadow:0 7px 0 #0b0d12;color:#fff;letter-spacing:.02em}
+.cursor{position:absolute;width:44px;height:44px;z-index:5}
+.grid{font:500 24px Inter}
+.grid .row{display:flex;height:66px;border-bottom:1.5px solid #20252e;align-items:center}
+.grid .row.head{height:56px;background:#11151b;color:var(--muted);font:600 21px JB;letter-spacing:.06em}
+.grid .c{padding:0 16px;height:100%;display:flex;align-items:center;border-right:1.5px solid #20252e;overflow:hidden;white-space:nowrap}
+.grid .c:last-child{border-right:none}
+.grid .n{width:72px;color:var(--muted);font:500 22px JB;justify-content:center}
+.ph{height:14px;border-radius:7px;background:#2a303b}
+.grid .row.active{background:rgba(47,109,240,.08)}
+.grid .c.focus{box-shadow:inset 0 0 0 3px #2f6df0}
+.caret{display:inline-block;width:3px;height:30px;background:#fff;margin-left:2px;vertical-align:middle}
+.form{padding:28px 36px}
+.field{margin-bottom:22px}
+.flabel{font:600 21px JB;letter-spacing:.08em;color:var(--muted);margin-bottom:10px}
+.finput{height:72px;border-radius:14px;border:1.5px solid #2c323d;background:#0f1217;font:500 29px Inter;color:#e6e9ee;display:flex;align-items:center;padding:0 22px;white-space:nowrap;overflow:hidden}
+.finput.focus{border-color:#2f6df0;box-shadow:0 0 0 4px rgba(47,109,240,.2)}
+
+/* ---------- email thread ---------- */
+.tl{position:absolute;left:72px;right:72px;display:flex;align-items:center;gap:20px;font:500 30px JB;color:var(--muted)}
+.tl .track{flex:1;height:4px;border-radius:2px;background:#2a303b;position:relative;overflow:hidden}
+.tl .fill{position:absolute;left:0;top:0;bottom:0;background:var(--amber)}
+.thread{position:absolute;left:72px;width:936px;border-radius:28px;background:#141820;border:1.5px solid var(--line);overflow:hidden}
+.msg{display:flex;gap:22px;padding:28px 32px;border-bottom:1.5px solid #20252e}
+.msg:last-child{border-bottom:none}
+.avatar{width:66px;height:66px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font:600 28px Poppins}
+.meta{font:500 27px Inter;color:var(--muted)}
+.meta b{color:#fff;font-weight:600}
+.mtext{font:400 35px Inter;color:#d5d9e0;margin-top:6px;line-height:1.38}
+
+/* ---------- system graph ---------- */
+.node{position:absolute;width:320px;height:150px;margin-left:-160px;margin-top:-75px;border-radius:28px;background:#151921;border:2px solid #2c323d;display:flex;align-items:center;gap:22px;padding:0 30px;z-index:2}
+.node .ic{width:70px;height:70px;border-radius:18px;background:#232935;display:flex;align-items:center;justify-content:center;flex:none}
+.node .ic svg{width:38px;height:38px}
+.node .lb{font:600 32px Poppins;color:#fff;letter-spacing:-0.01em}
+
+/* ---------- chat ---------- */
+.chat{position:absolute;left:72px;width:936px;border-radius:30px;background:#12161d;border:1.5px solid var(--line);overflow:hidden}
+.chead{height:100px;display:flex;align-items:center;gap:20px;padding:0 30px;border-bottom:1.5px solid #20252e;background:#151a22}
+.cav{width:58px;height:58px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center}
+.cname{font:600 30px Poppins}
+.cstat{font:500 22px Inter;color:var(--muted);display:flex;align-items:center;gap:10px}
+.cstat i{width:12px;height:12px;border-radius:50%;background:var(--green);display:inline-block}
+.cbody{position:relative;padding:28px 30px}
+.bub{position:absolute;max-width:700px;padding:20px 26px;border-radius:28px;font:400 29px Inter;line-height:1.38}
+.bub.me{right:30px;background:#2a303b;color:#eef0f3;border-bottom-right-radius:8px}
+.bub.ai{left:30px;background:#1c212b;color:#eef0f3;border:1.5px solid rgba(240,86,46,.45);border-bottom-left-radius:8px}
+.btime{font:500 20px Inter;color:var(--muted);margin-top:6px}
+.typing{position:absolute;left:30px;padding:24px 28px;border-radius:28px;background:#1c212b;display:flex;gap:10px}
+.typing i{width:14px;height:14px;border-radius:50%;background:#8b93a3;display:block}
+.chip{position:absolute;font:600 22px Inter;color:var(--amber);display:flex;align-items:center;gap:8px;letter-spacing:.01em}
+.slot{position:absolute;padding:16px 28px;border-radius:100px;font:600 27px Inter;border:2px solid #3a414d;color:#e6e9ee;background:#161a22}
+.slot.pick{border-color:transparent;background:var(--grad);color:#fff}
+.confirm{position:absolute;left:30px;right:30px;height:104px;border-radius:22px;background:rgba(47,184,95,.1);border:1.5px solid rgba(47,184,95,.5);display:flex;align-items:center;gap:20px;padding:0 26px}
+.confirm .ci{width:58px;height:58px;border-radius:16px;background:rgba(47,184,95,.2);display:flex;align-items:center;justify-content:center}
+.confirm .ct{font:600 29px Inter}
+.confirm .cs{font:500 23px Inter;color:#9fd9b3}
+.crm{position:absolute;left:72px;width:936px;height:132px;border-radius:26px;background:#151921;border:1.5px solid var(--line);display:flex;align-items:center;gap:22px;padding:0 28px}
+.crm .ic{width:72px;height:72px;border-radius:18px;background:#232935;display:flex;align-items:center;justify-content:center;flex:none}
+.pill{padding:10px 22px;border-radius:100px;background:var(--grad);font:600 23px Inter;color:#fff;white-space:nowrap}
+
+/* ---------- today agenda ---------- */
+.agenda{position:absolute;left:72px;width:936px;border-radius:32px;background:rgba(21,25,33,.92);border:1.5px solid #2e3440;overflow:hidden}
+.ahead{padding:34px 36px 20px;display:flex;align-items:flex-end;justify-content:space-between}
+.aday{font:700 64px Poppins;letter-spacing:-0.02em;line-height:1}
+.asub{font:500 25px Inter;color:var(--muted);margin-top:10px}
+.item{display:flex;align-items:center;gap:24px;margin:0 28px 18px;padding:24px 26px;border-radius:24px;background:#1b2029;border:1.5px solid #272d38}
+.item .tm{font:600 30px JB;color:var(--amber);width:110px}
+.item .it{flex:1}
+.item .t1{font:600 30px Inter}
+.item .t2{font:500 23px Inter;color:var(--muted);margin-top:4px}
+
+/* ---------- brand ---------- */
+.wordmark{font-family:Poppins;font-weight:800;letter-spacing:-0.03em;line-height:1;white-space:nowrap}
+.doc{position:absolute;left:130px;width:820px;border-radius:30px;background:#f6f7f9;color:#0e1117;padding:44px 48px;box-shadow:0 60px 120px -50px rgba(0,0,0,.95)}
+.dtitle{font:700 46px Poppins;letter-spacing:-0.02em}
+.dsub{font:500 25px Inter;color:#68717f;margin-top:4px}
+.dsec{margin-top:34px;position:relative}
+.dlab{font:500 22px JB;letter-spacing:.14em;color:#cc4622;margin-bottom:14px}
+.dbar{height:16px;border-radius:8px;background:#dfe2e9;margin-bottom:12px}
+.dchk{position:absolute;right:0;top:-6px;width:52px;height:52px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center}
+.stages{display:flex;gap:10px}
+.stg{flex:1;height:54px;border-radius:12px;background:#eef0f4;display:flex;align-items:center;justify-content:center;font:600 20px Inter;color:#4b5361}
+.badge{position:absolute;width:170px;height:170px;border-radius:50%;background:var(--grad);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 20px 40px -12px rgba(240,86,46,.7);color:#fff}
+.badge b{font:800 64px Poppins;line-height:1;letter-spacing:-0.03em}
+.badge span{font:600 18px JB;letter-spacing:.12em;margin-top:4px}
+.cta-pill{position:absolute;left:50%;padding:30px 70px;border-radius:120px;background:var(--grad);font:700 66px Poppins;letter-spacing:-0.02em;color:#fff;white-space:nowrap;box-shadow:0 24px 60px -18px rgba(240,86,46,.85)}
+</style>
+</head>
+<body>
+<div id="stage">
+  <!-- background -->
+  <div class="layer" id="bgCool" style="background:radial-gradient(70% 45% at 15% 8%,rgba(70,100,160,.30),transparent 70%),radial-gradient(60% 40% at 90% 95%,rgba(50,70,110,.22),transparent 70%)"></div>
+  <div class="layer" id="bgWarm" style="opacity:0;background:radial-gradient(70% 45% at 85% 6%,rgba(240,86,46,.26),transparent 70%),radial-gradient(70% 40% at 10% 100%,rgba(255,154,61,.16),transparent 70%)"></div>
+
+  <!-- ===== A: hook ===== -->
+  <div class="scene" id="sA"><div class="phone" style="top:640px"><div class="screen cool" id="scrA"><div class="island"></div><div class="ls-date">Thursday</div><div class="ls-time">9:47</div><div class="notifs" id="nA"></div></div></div></div>
+
+  <!-- ===== B1: 9:47 PM ===== -->
+  <div class="scene" id="sB1"><div class="phone" style="top:540px"><div class="screen cool" id="scrB1"><div class="island"></div><div class="ls-date">Thursday</div><div class="ls-time">9:47</div><div class="notifs" id="nB1"></div></div></div></div>
+
+  <!-- ===== B2a: inbox copy ===== -->
+  <div class="scene" id="sB2a">
+    <div class="win" style="top:600px;height:560px">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="ttl">Inbox</span></div>
+      <div class="mailhead">
+        <div class="mailrow">From <b>Website contact form</b></div>
+        <div class="mailrow">Thu 9:47 PM</div>
+        <div class="mailsub">Quote request</div>
+      </div>
+      <div class="mailbody" id="mailBody">
+        <span class="sl">Hi, could you send me a quote for</span>
+        <span class="sl">a new website with online booking?</span>
+        <span class="sl">We'd like to launch next month.</span>
+      </div>
+    </div>
+    <svg class="cursor" id="curB2" viewBox="0 0 24 24"><path d="M4 2l15 9-6.5 1.6L9 19z" fill="#fff" stroke="#0b0e13" stroke-width="1.4" stroke-linejoin="round"/></svg>
+    <div class="key" id="keyC" style="left:430px;top:1210px">⌘ C</div>
+  </div>
+
+  <!-- ===== B2b: spreadsheet paste ===== -->
+  <div class="scene" id="sB2b">
+    <div class="win" style="top:600px;height:590px">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="ttl">Enquiries — Sheet 1</span></div>
+      <div class="grid" id="grid"></div>
+    </div>
+    <div class="key" id="keyV" style="left:430px;top:1230px">⌘ V</div>
+  </div>
+
+  <!-- ===== B3: CRM retype ===== -->
+  <div class="scene" id="sB3">
+    <div class="win" style="top:590px;height:690px">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="ttl">CRM — New contact</span></div>
+      <div class="form" id="crmForm"></div>
+    </div>
+  </div>
+
+  <!-- ===== B4/B5: late reply ===== -->
+  <div class="scene" id="sB45">
+    <div class="tl" id="tlRow" style="top:570px"><span>THU 9:47 PM</span><div class="track"><div class="fill" id="tlFill"></div></div><span id="tlEnd">THU 9:47 PM</span></div>
+    <div class="thread" id="thread" style="top:660px">
+      <div class="msg" id="mFirst"><div class="avatar" style="background:#2a303b;color:#c9cfd8">J</div><div><div class="meta"><b>J. (website enquiry)</b> · Thu 9:47 PM</div><div class="mtext">Hi, could you send me a quote for a new website with online booking?</div></div></div>
+      <div class="msg" id="mReply"><div class="avatar" style="background:#232935;color:#8b93a3">You</div><div><div class="meta"><b>You</b> · Sat 11:20 AM</div><div class="mtext">Hi J, thanks for getting in touch! Happy to help. Are you free for a call this week?</div></div></div>
+      <div class="msg" id="mGone"><div class="avatar" style="background:#2a303b;color:#c9cfd8">J</div><div><div class="meta"><b>J.</b> · Sat 2:05 PM</div><div class="mtext" style="color:#fff">Thanks — we've already gone with someone else.</div></div></div>
+    </div>
+    <div class="layer" id="dimB5" style="background:radial-gradient(80% 60% at 50% 45%,transparent 30%,rgba(5,6,9,.85) 100%);opacity:0"></div>
+  </div>
+
+  <!-- ===== C1: your team isn't the problem (headline only) ===== -->
+  <div class="scene" id="sC1"></div>
+
+  <!-- ===== C2-C4: the glue → better systems ===== -->
+  <div class="scene" id="sC">
+    <svg class="layer" id="gsvg" width="1080" height="1920" viewBox="0 0 1080 1920">
+      <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f0562e"/><stop offset="1" stop-color="#ff9a3d"/></linearGradient></defs>
+      <g id="gDotted"></g><g id="gTangle"></g><g id="gSolid"></g><g id="gTravel"></g><g id="gFlow"></g><g id="gLabels"></g>
+    </svg>
+    <div class="node" id="ndInbox" style="left:280px;top:860px"><div class="ic"></div><div class="lb">Inbox</div></div>
+    <div class="node" id="ndSheet" style="left:800px;top:860px"><div class="ic"></div><div class="lb">Sheet</div></div>
+    <div class="node" id="ndCrm" style="left:540px;top:1220px"><div class="ic"></div><div class="lb">CRM</div></div>
+  </div>
+
+  <!-- ===== D0: rewind ===== -->
+  <div class="scene" id="sD0">
+    <div class="layer" style="background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 2px,transparent 2px 6px)"></div>
+    <div class="abs" id="rwTxt" style="left:0;right:0;top:860px;text-align:center;font:500 92px JB;letter-spacing:.04em;color:#fff"></div>
+    <div class="abs" style="left:0;right:0;top:1000px;display:flex;justify-content:center;gap:4px;opacity:.8">
+      <svg width="90" height="60" viewBox="0 0 90 60"><path d="M44 6v48L4 30zM86 6v48L46 30z" fill="#ff9a3d"/></svg>
+    </div>
+  </div>
+
+  <!-- ===== D1: same enquiry ===== -->
+  <div class="scene" id="sD1"><div class="phone" style="top:540px"><div class="screen warm"><div class="island"></div><div class="ls-date">Thursday</div><div class="ls-time">9:47</div><div class="notifs" id="nD1"></div></div></div></div>
+
+  <!-- ===== D2: assistant ===== -->
+  <div class="scene" id="sD2">
+    <div class="chat" style="top:600px;height:720px">
+      <div class="chead"><div class="cav"><svg width="30" height="30" viewBox="0 0 24 24"><path d="M12 2l2.3 6.4 6.7 2.3-6.7 2.3L12 19.4l-2.3-6.4L3 10.7l6.7-2.3z" fill="#fff"/></svg></div><div><div class="cname">Assistant</div><div class="cstat"><i></i>Online · replies instantly</div></div></div>
+      <div class="cbody" id="cbody">
+        <div class="bub me" id="bMe" style="top:28px">Hi, could you send me a quote for a new website with online booking?<div class="btime" style="text-align:right">9:47 PM</div></div>
+        <div class="typing" id="bTyping" style="top:222px"><i></i><i></i><i></i></div>
+        <div class="bub ai" id="bAi" style="top:222px">Thanks for getting in touch! Happy to help with a quote. Would a quick call on <b style="font-weight:600">Tuesday at 10:00</b> work?<div class="btime">9:47 PM</div></div>
+        <div class="chip" id="chReplied" style="left:34px;top:438px"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#ff9a3d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Replied in seconds</div>
+        <div class="slot" id="slot1" style="left:30px;top:486px">Tue 10:00</div>
+        <div class="slot" id="slot2" style="left:250px;top:486px">Wed 14:30</div>
+        <div class="confirm" id="cConfirm" style="top:486px"><div class="ci"><svg width="32" height="32" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="#2fb85f" stroke-width="2"/><path d="M3 10h18M8 3v4M16 3v4" stroke="#2fb85f" stroke-width="2"/></svg></div><div style="flex:1"><div class="ct">Call booked</div><div class="cs">Tuesday · 10:00 · invite sent</div></div><svg width="40" height="40" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#2fb85f"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+    </div>
+    <div class="crm" id="crmCard" style="top:1340px">
+      <div class="ic"><svg width="38" height="38" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="#c9cfd8"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z" fill="#c9cfd8"/></svg></div>
+      <div style="flex:1"><div style="font:500 20px JB;letter-spacing:.12em;color:#ff9a3d">CRM · NEW LEAD</div><div style="font:600 30px Inter;margin-top:4px">Quote request · Website</div></div>
+      <div class="pill">Call booked</div>
+    </div>
+  </div>
+
+  <!-- ===== D3: today ===== -->
+  <div class="scene" id="sD3">
+    <div class="layer" id="sunrise" style="background:radial-gradient(60% 34% at 50% 34%,rgba(255,154,61,.30),transparent 70%)"></div>
+    <div class="agenda" style="top:600px">
+      <div class="ahead"><div><div class="aday">Today</div><div class="asub">Friday · 8:30 AM</div></div><div class="pill" style="background:rgba(47,184,95,.16);color:#7fdc9f;border:1.5px solid rgba(47,184,95,.45)">No backlog</div></div>
+      <div id="agItems" style="padding-top:10px;padding-bottom:12px"></div>
+    </div>
+  </div>
+
+  <!-- ===== E1: brand ===== -->
+  <div class="scene" id="sE1">
+    <img id="e1Mark" class="abs" src="assets/logo-mark-dark.png" style="left:399px;top:690px;width:282px;height:220px">
+    <div id="e1Word" class="abs wordmark" style="left:0;right:0;top:965px;text-align:center;font-size:136px">Nuova<span class="k-grad">Dev</span></div>
+    <div id="e1Tag" class="abs" style="left:0;right:0;top:1140px;text-align:center;font:500 40px Inter;color:#9aa3b2">Software built around your business.</div>
+  </div>
+
+  <!-- ===== E2: written scope ===== -->
+  <div class="scene" id="sE2">
+    <div class="doc" id="doc" style="top:640px">
+      <div class="dtitle">Your project</div>
+      <div class="dsub">Written summary · after one call</div>
+      <div class="dsec"><div class="dlab">SCOPE</div><div class="dbar" style="width:92%"></div><div class="dbar" style="width:78%"></div><div class="dbar" style="width:64%"></div><div class="dchk" id="ck1"><svg width="30" height="30" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+      <div class="dsec"><div class="dlab">TIMELINE</div><div class="stages"><div class="stg">Understand</div><div class="stg">Design</div><div class="stg">Build</div><div class="stg">Launch</div></div><div class="dchk" id="ck2"><svg width="30" height="30" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+      <div class="dsec"><div class="dlab">PRICE</div><div class="dbar" style="width:70%"></div><div class="dbar" style="width:46%"></div><div class="dchk" id="ck3"><svg width="30" height="30" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    </div>
+    <div class="badge" id="badge48" style="left:800px;top:575px"><b>48h</b><span>IN WRITING</span></div>
+  </div>
+
+  <!-- ===== F1: before your next hire ===== -->
+  <div class="scene" id="sF1"></div>
+
+  <!-- ===== F2: end card ===== -->
+  <div class="scene" id="sF2">
+    <div class="abs" id="fLogo" style="left:0;right:0;top:330px;display:flex;justify-content:center;align-items:center;gap:22px">
+      <img src="assets/logo-mark-dark.png" style="width:96px;height:75px"><div class="wordmark" style="font-size:62px">Nuova<span class="k-grad">Dev</span></div>
+    </div>
+    <div class="abs" id="fPre" style="left:0;right:0;top:575px;text-align:center;font:500 42px Inter;color:#9aa3b2">Before your next hire →</div>
+    <div class="cta-pill" id="fPill" style="top:930px">nuovadev.com</div>
+    <div class="abs" id="fBio" style="left:0;right:0;top:1118px;text-align:center;font:600 36px Inter;color:#fff">Link in bio</div>
+    <div class="abs" id="fTrust" style="left:0;right:0;top:1186px;text-align:center;font:500 24px JB;letter-spacing:.12em;color:#8b93a3">WRITTEN QUOTE IN 48H · YOU OWN THE CODE</div>
+  </div>
+
+  <!-- headlines and eyebrows are injected here -->
+  <div id="captions"></div>
+
+  <div class="layer" id="grain" style="opacity:.07;mix-blend-mode:overlay"></div>
+  <div class="layer" style="background:radial-gradient(90% 70% at 50% 45%,transparent 55%,rgba(0,0,0,.45) 100%)"></div>
+</div>
+
+<script>
+/* ======================= helpers ======================= */
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const lerp = (a, b, x) => a + (b - a) * x;
+const easeOut = x => 1 - Math.pow(1 - x, 3);
+const easeInOut = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const easeBack = x => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+const pingpong = x => { const f = ((x % 2) + 2) % 2; return f < 1 ? f : 2 - f; };
+function appear(el, t, a, d = .3, y = 30, s0 = 1) {
+  const p = prog(t, a, a + d), e = easeOut(p), sc = s0 === 1 ? 1 : lerp(s0, 1, easeBack(p));
+  el.style.opacity = e;
+  el.style.transform = `translateY(${(1 - e) * y}px) scale(${sc})`;
+}
+function typed(str, t, a, b) { const n = Math.round(str.length * prog(t, a, b)); return str.slice(0, n); }
+
+const ICON = {
+  mail: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5" fill="none" stroke="#fff" stroke-width="2"/><path d="M3.5 7l8.5 6 8.5-6" fill="none" stroke="#fff" stroke-width="2"/></svg>',
+  phone: '<svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.6 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.6 3.6a1 1 0 01-.25 1z" fill="#fff"/></svg>',
+  chat: '<svg viewBox="0 0 24 24"><path d="M4 4h16a1 1 0 011 1v11a1 1 0 01-1 1H8.5L4 21V5a1 1 0 011-1z" fill="#fff"/></svg>',
+  globe: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#fff" stroke-width="2"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18" fill="none" stroke="#fff" stroke-width="2"/></svg>',
+  sheet: '<svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5" fill="none" stroke="#fff" stroke-width="2"/><path d="M3.5 9.5h17M3.5 15h17M9.5 3.5v17" stroke="#fff" stroke-width="2"/></svg>',
+  person: '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="#fff"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z" fill="#fff"/></svg>',
+};
+
+/* ======================= captions ======================= */
+// Word timings follow the voiceover script at roughly 3 words per second.
+const THEMES = {
+  before:  { n: '#9aa3b2', k: 'white' },
+  neutral: { n: '#9aa3b2', k: 'white' },
+  after:   { n: '#e9ecf1', k: 'grad' },
+  brand:   { n: '#ffffff', k: 'grad' },
+};
+const HL_DEFS = [
+  { id: 'hook', a: 0,     b: 3.0,   s: 0,     e: 2.3,  size: 100, top: 240, lines: ["Don't hire", "another person", "to *fix *this."], theme: 'brand', allLit: true },
+  { id: 'b1',   a: 3.0,   b: 5.0,   s: 3.05,  e: 4.9,  size: 80,  lines: ["An enquiry lands", "at *9:47 *PM."], theme: 'before' },
+  { id: 'b2',   a: 5.0,   b: 8.0,   s: 5.05,  e: 7.7,  size: 76,  lines: ["Next morning,", "someone copies it", "into a *spreadsheet."], theme: 'before' },
+  { id: 'b3',   a: 8.0,   b: 9.0,   s: 8.0,   e: 8.85, size: 80,  lines: ["Then the *CRM."], theme: 'before' },
+  { id: 'b4',   a: 9.0,   b: 11.0,  s: 9.05,  e: 10.7, size: 80,  lines: ["*Two *days *later,", "you reply."], theme: 'before' },
+  { id: 'b5',   a: 11.0,  b: 13.0,  s: 11.05, e: 11.7, size: 96,  lines: ["They've *moved *on."], theme: 'before' },
+  { id: 'c1',   a: 13.0,  b: 15.0,  s: 13.1,  e: 14.6, size: 124, top: 700, lines: ["Your team", "*isn't the", "problem."], theme: 'neutral', center: true },
+  { id: 'c2',   a: 15.0,  b: 19.0,  s: 15.05, e: 18.8, size: 72,  lines: ["They've become", "the *glue between tools", "that don't talk", "to each other."], theme: 'neutral' },
+  { id: 'c3',   a: 19.0,  b: 20.85, s: 19.05, e: 20.4, size: 84,  lines: ["More people", "won't fix that."], theme: 'neutral' },
+  { id: 'c4',   a: 20.85, b: 22.0,  s: 20.9,  e: 21.7, size: 124, top: 250, lines: ["*Better", "*systems *will."], theme: 'brand' },
+  { id: 'd1',   a: 22.45, b: 24.0,  s: 22.5,  e: 23.8, size: 88,  lines: ["Same enquiry.", "*9:47 *PM."], theme: 'after' },
+  { id: 'd2',   a: 24.0,  b: 28.0,  s: 24.05, e: 27.8, size: 70,  lines: ["An AI assistant", "*replies *in *seconds,", "*books *the *call, and", "*updates *your *CRM."], theme: 'after' },
+  { id: 'd3',   a: 28.0,  b: 31.0,  s: 28.05, e: 30.8, size: 74,  lines: ["Your team wakes up to", "*booked *calls —", "not a backlog."], theme: 'after' },
+  { id: 'e1',   a: 31.0,  b: 33.0,  s: 31.05, e: 31.9, size: 58,  top: 560, lines: ["That's what we build at"], theme: 'after', center: true },
+  { id: 'e2',   a: 33.0,  b: 38.0,  s: 33.05, e: 37.8, size: 68,  lines: ["Within *48 *hours of", "our first call, you'll", "have a written *scope,", "*timeline and *price."], theme: 'after' },
+  { id: 'f1',   a: 38.0,  b: 39.6,  s: 38.05, e: 39.4, size: 112, top: 760, lines: ["So before your", "*next *hire —"], theme: 'brand', center: true },
+  { id: 'f2',   a: 39.6,  b: 99,    s: 39.65, e: 41.1, size: 108, top: 650, lines: ["Book a free", "*30-minute *call"], theme: 'brand', center: true },
+];
+const EB_DEFS = [
+  { a: 3.0,   b: 5.0,   text: 'THURSDAY · 9:47 PM' },
+  { a: 5.0,   b: 8.0,   text: 'NEXT MORNING' },
+  { a: 8.0,   b: 9.0,   text: 'COPY. PASTE. AGAIN.' },
+  { a: 9.0,   b: 13.0,  text: '2 DAYS LATER', cls: 'amber' },
+  { a: 19.0,  b: 20.85, text: 'MORE PEOPLE. MORE GLUE.' },
+  { a: 22.45, b: 24.0,  text: 'THURSDAY · 9:47 PM', cls: 'brand' },
+  { a: 24.0,  b: 28.0,  text: 'WHILE YOUR TEAM IS OFFLINE', cls: 'brand' },
+  { a: 28.0,  b: 31.0,  text: 'NEXT MORNING', cls: 'brand' },
+  { a: 33.0,  b: 38.0,  text: 'AFTER ONE FREE 30-MIN CALL', cls: 'brand' },
+];
+const HLS = {};
+function buildHeadlines() {
+  const root = $('captions');
+  for (const d of HL_DEFS) {
+    const el = document.createElement('div');
+    el.className = 'hl' + (d.center ? ' center' : '');
+    el.style.fontSize = d.size + 'px';
+    if (d.top) el.style.top = d.top + 'px';
+    const th = THEMES[d.theme];
+    const words = [];
+    for (const line of d.lines) {
+      const ln = document.createElement('span'); ln.className = 'ln';
+      line.split(' ').forEach((raw, i) => {
+        const key = raw.startsWith('*'); const txt = key ? raw.slice(1) : raw;
+        if (i) ln.appendChild(document.createTextNode(' '));
+        const sp = document.createElement('span'); sp.textContent = txt;
+        if (key && th.k === 'grad') sp.className = 'k-grad';
+        else sp.style.color = key ? '#ffffff' : th.n;
+        ln.appendChild(sp); words.push({ el: sp, txt });
+      });
+      el.appendChild(ln);
+    }
+    // distribute word start times across the spoken window, weighted by length
+    const w = words.map(x => x.txt.length + 2), tot = w.reduce((p, c) => p + c, 0);
+    let acc = 0; for (let i = 0; i < words.length; i++) { words[i].t = d.s + (d.e - d.s) * acc / tot; acc += w[i]; }
+    root.appendChild(el);
+    HLS[d.id] = { d, el, words };
+  }
+  for (const d of EB_DEFS) {
+    const el = document.createElement('div'); el.className = 'eb' + (d.cls ? ' ' + d.cls : ''); el.textContent = d.text;
+    root.appendChild(el); d.el = el;
+  }
+}
+function fitHeadlines() {
+  for (const id in HLS) {
+    const h = HLS[id]; h.el.style.display = 'block';
+    let size = h.d.size;
+    const lines = [...h.el.querySelectorAll('.ln')];
+    while (size > 30 && lines.some(l => l.getBoundingClientRect().width > 936)) { size -= 2; h.el.style.fontSize = size + 'px'; }
+    h.el.style.display = 'none';
+  }
+}
+function wordTime(id, txt) { const w = HLS[id].words.find(x => x.txt.toLowerCase().startsWith(txt)); return w ? w.t : 0; }
+function renderCaptions(t) {
+  for (const id in HLS) {
+    const h = HLS[id], on = t >= h.d.a && t < h.d.b;
+    h.el.style.display = on ? 'block' : 'none';
+    if (!on) continue;
+    for (const w of h.words) {
+      const p = h.d.allLit ? 1 : easeOut(prog(t, w.t - .03, w.t + .14));
+      w.el.style.opacity = (0.2 + 0.8 * p).toFixed(3);
+    }
+    if (id === 'hook') { const p = easeOut(prog(t, 1.95, 2.25)); h.el.style.transform = `scale(${1 + .03 * p})`; h.el.style.transformOrigin = '0 0'; }
+    if (id === 'c4') { const p = prog(t, 20.85, 21.1); h.el.style.transform = `scale(${lerp(1.12, 1, easeOut(p))})`; h.el.style.transformOrigin = '0 50%'; }
+    if (id === 'f1') { const p = prog(t, 39.35, 39.6); h.el.style.opacity = 1 - p; h.el.style.transform = `translateY(${-60 * easeInOut(p)}px)`; }
+  }
+  for (const d of EB_DEFS) d.el.style.display = (t >= d.a && t < d.b) ? 'block' : 'none';
+}
+
+/* ======================= phones ======================= */
+function makeNotif(n) {
+  const el = document.createElement('div'); el.className = 'notif';
+  el.innerHTML = `<div class="nicon" style="background:${n.bg}">${ICON[n.icon]}</div><div class="nbody"><div class="nrow"><span>${n.app}</span><span>${n.when}</span></div><div class="ntitle">${n.title}</div><div class="ntext">${n.text}</div></div>`;
+  return el;
+}
+const HOOK_NOTIFS = [ // oldest first; `at` = when it lands
+  { at: -1,  app: 'MAIL', when: '9:12 PM', title: 'Re: availability', text: 'Just following up on my last message…', icon: 'mail', bg: '#2f6df0' },
+  { at: -1,  app: 'PHONE', when: '9:30 PM', title: 'Missed call', text: 'Unknown number · 1 voicemail', icon: 'phone', bg: '#2fb85f' },
+  { at: -1,  app: 'MESSAGES', when: 'now', title: 'New message', text: 'Do you work with small businesses?', icon: 'chat', bg: '#8b6cff' },
+  { at: 0.6, app: 'WEBSITE', when: 'now', title: 'New enquiry', text: 'Hi, are you taking on new projects?', icon: 'globe', bg: '#12b5a4' },
+  { at: 1.2, app: 'MAIL', when: 'now', title: 'Quote request', text: 'Could you send me a price for…', icon: 'mail', bg: '#2f6df0' },
+  { at: 1.8, app: 'PHONE', when: 'now', title: '2 missed calls', text: 'Unknown number', icon: 'phone', bg: '#2fb85f' },
+];
+const NA = HOOK_NOTIFS.map(n => { const el = makeNotif(n); $('nA').appendChild(el); return { n, el }; });
+const ENQ = { app: 'WEBSITE', when: 'now', title: 'New enquiry · Quote request', text: 'Hi, could you send me a quote for…', icon: 'globe', bg: '#12b5a4' };
+const nB1 = makeNotif(ENQ); nB1.classList.add('glow'); $('nB1').appendChild(nB1);
+const nD1 = makeNotif(ENQ); nD1.classList.add('glow-warm'); $('nD1').appendChild(nD1);
+
+function renderHook(t) {
+  const STEP = 146;
+  for (let i = 0; i < NA.length; i++) {
+    const { n, el } = NA[i];
+    if (t < n.at) { el.style.opacity = 0; continue; }
+    // slot = number of notifications that landed after this one (newest sits on top)
+    let slot = 0;
+    for (let j = i + 1; j < NA.length; j++) slot += easeOut(prog(t, NA[j].n.at, NA[j].n.at + .28));
+    const enter = n.at < 0 ? 1 : easeOut(prog(t, n.at, n.at + .28));
+    el.style.opacity = enter;
+    el.style.transform = `translateY(${slot * STEP - (1 - enter) * 60}px) scale(${lerp(.94, 1, enter)})`;
+  }
+}
+
+/* ======================= spreadsheet & CRM ======================= */
+(function buildGrid() {
+  const g = $('grid');
+  const cols = [['n', 72], ['DATE', 140], ['NAME', 150], ['REQUEST', 370], ['STATUS', 200]];
+  let html = '<div class="row head">' + cols.map(([c, w], i) => `<div class="c${i ? '' : ' n'}" style="width:${w}px">${i ? c : '#'}</div>`).join('') + '</div>';
+  const widths = [[70, 90, 230, 120], [60, 110, 260, 90], [80, 70, 200, 130], [70, 120, 280, 110], [60, 80, 240, 120], [80, 100, 210, 100]];
+  for (let r = 0; r < 6; r++) {
+    html += `<div class="row"><div class="c n" style="width:72px">${31 + r}</div>` +
+      widths[r].map((w, i) => `<div class="c" style="width:${cols[i + 1][1]}px"><div class="ph" style="width:${w}px"></div></div>`).join('') + '</div>';
+  }
+  html += `<div class="row active" id="row37"><div class="c n" style="width:72px">37</div><div class="c" style="width:140px" id="g37a"></div><div class="c" style="width:150px" id="g37b"></div><div class="c focus" style="width:370px" id="g37c"></div><div class="c" style="width:200px" id="g37d"></div></div>`;
+  g.innerHTML = html;
+})();
+const CRM_FIELDS = [['NAME', 'J.'], ['EMAIL', 'j@example.com'], ['SOURCE', 'Website contact form'], ['NOTES', 'Quote — website + booking']];
+(function buildCrm() {
+  $('crmForm').innerHTML = CRM_FIELDS.map((f, i) => `<div class="field"><div class="flabel">${f[0]}</div><div class="finput" id="cf${i}"></div></div>`).join('');
+})();
+
+/* ======================= system graph ======================= */
+const NS = 'http://www.w3.org/2000/svg';
+const P = { inbox: [280, 860], sheet: [800, 860], crm: [540, 1220] };
+const EDGES = [['inbox', 'sheet'], ['sheet', 'crm'], ['crm', 'inbox']];
+function sv(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent && parent.appendChild(e); return e; }
+['ndInbox', 'ndSheet', 'ndCrm'].forEach((id, i) => { $(id).querySelector('.ic').innerHTML = ICON[['mail', 'sheet', 'person'][i]]; });
+const dotted = EDGES.map(([a, b]) => sv('line', { x1: P[a][0], y1: P[a][1], x2: P[b][0], y2: P[b][1], stroke: '#5a6372', 'stroke-width': 5, 'stroke-linecap': 'round', 'stroke-dasharray': '1 16' }, $('gDotted')));
+const solid = EDGES.map(([a, b]) => { const L = Math.hypot(P[b][0] - P[a][0], P[b][1] - P[a][1]); const e = sv('line', { x1: P[a][0], y1: P[a][1], x2: P[b][0], y2: P[b][1], stroke: 'url(#g1)', 'stroke-width': 7, 'stroke-linecap': 'round', 'stroke-dasharray': L, 'stroke-dashoffset': L }, $('gSolid')); e._L = L; return e; });
+// solid lines use objectBoundingBox gradients, which collapse on vertical-ish lines; give each its own userSpace gradient
+solid.forEach((e, i) => {
+  const [a, b] = EDGES[i]; const id = 'gl' + i;
+  const lg = sv('linearGradient', { id, gradientUnits: 'userSpaceOnUse', x1: P[a][0], y1: P[a][1], x2: P[b][0], y2: P[b][1] }, $('gsvg').querySelector('defs'));
+  sv('stop', { offset: 0, 'stop-color': '#f0562e' }, lg); sv('stop', { offset: 1, 'stop-color': '#ff9a3d' }, lg);
+  e.setAttribute('stroke', `url(#${id})`);
+});
+const labels = EDGES.map(([a, b], i) => { const x = (P[a][0] + P[b][0]) / 2, y = (P[a][1] + P[b][1]) / 2 + (i === 0 ? -26 : 0); const g = sv('text', { x: i === 1 ? x + 92 : i === 2 ? x - 92 : x, y, 'text-anchor': 'middle', fill: '#7b8492', 'font-family': 'JB', 'font-size': 22, 'letter-spacing': '2' }, $('gLabels')); g.textContent = 'copy · paste'; return g; });
+// tangles: messy curves between the same nodes
+const TANGLE = [[0, 120, -160], [0, -140, 150], [1, 170, 60], [1, -160, -90], [2, -150, 120], [2, 130, -140], [0, 60, 230], [1, 220, -40]];
+function qpt(ax, ay, cx, cy, bx, by, u) { const v = 1 - u; return [v * v * ax + 2 * v * u * cx + u * u * bx, v * v * ay + 2 * v * u * cy + u * u * by]; }
+const tangles = TANGLE.map(([ei, ox, oy]) => { const [a, b] = EDGES[ei]; const cx = (P[a][0] + P[b][0]) / 2 + ox, cy = (P[a][1] + P[b][1]) / 2 + oy; const e = sv('path', { d: `M${P[a][0]},${P[a][1]} Q${cx},${cy} ${P[b][0]},${P[b][1]}`, fill: 'none', stroke: '#4b5361', 'stroke-width': 4, 'stroke-linecap': 'round', 'stroke-dasharray': '1 14' }, $('gTangle')); e._q = [P[a][0], P[a][1], cx, cy, P[b][0], P[b][1]]; return e; });
+function person(parent, fill) { const g = sv('g', {}, parent); sv('circle', { cx: 0, cy: 0, r: 22, fill: '#0b0e13', stroke: fill, 'stroke-width': 3 }, g); sv('circle', { cx: 0, cy: -5, r: 6.5, fill }, g); sv('path', { d: 'M-11,13 C-11,4 11,4 11,13 Z', fill }, g); return g; }
+const TRAV = [[0, .9, 0], [1, .8, .5], [2, .85, 1.2], [0, .7, 1.4], [1, .95, .2], [2, .75, .8]]; // edge, speed, phase
+const travellers = TRAV.map(([ei, sp, ph], i) => ({ ei, sp, ph, g: person($('gTravel'), '#c9cfd8'), extra: i >= 3 }));
+const TRAV2 = TANGLE.map((_, i) => ({ ti: i, sp: .9 + (i % 3) * .2, ph: i * .37, g: person($('gTravel'), '#9aa3b2') }));
+const flows = []; for (let i = 0; i < 3; i++) for (let k = 0; k < 3; k++) flows.push({ ei: i, ph: k / 3, c: sv('circle', { r: 9, fill: '#ffd2b8' }, $('gFlow')) });
+
+function renderGraph(t) {
+  const nodes = ['ndInbox', 'ndSheet', 'ndCrm'].map($);
+  const snapT = 20.9, snapped = t >= snapT;
+  nodes.forEach((n, i) => {
+    const a = 15.1 + i * .4; const p = prog(t, a, a + .32);
+    const bounce = snapped ? 1 + .05 * Math.sin(Math.PI * prog(t, snapT, snapT + .3)) : 1;
+    n.style.opacity = easeOut(p); n.style.transform = `scale(${lerp(.7, 1, easeBack(p)) * bounce})`;
+    n.style.borderColor = snapped ? '#f0562e' : '#2c323d';
+    n.style.boxShadow = snapped ? '0 0 50px -6px rgba(240,86,46,.55)' : 'none';
+  });
+  const tm = Math.min(t, 20.7); // travellers freeze just before the snap
+  const lineIn = prog(t, 16.0, 16.6);
+  dotted.forEach((d, i) => { d.style.opacity = snapped ? 0 : lineIn; d.setAttribute('stroke-dashoffset', -tm * 40); });
+  labels.forEach(l => l.style.opacity = snapped ? 0 : lineIn * (t < 19.2 ? 1 : 1 - prog(t, 19.2, 19.6)));
+  const tangleIn = prog(t, 19.05, 19.5);
+  tangles.forEach(e => { e.style.opacity = snapped ? 0 : tangleIn; e.setAttribute('stroke-dashoffset', -tm * 55); });
+  travellers.forEach(r => {
+    const vis = snapped ? 0 : (r.extra ? prog(t, 19.05, 19.35) : prog(t, 16.4, 16.8));
+    const [a, b] = EDGES[r.ei]; const u = easeInOut(pingpong(r.ph + Math.max(0, tm - 16.4) * r.sp));
+    r.g.setAttribute('transform', `translate(${lerp(P[a][0], P[b][0], u)},${lerp(P[a][1], P[b][1], u)})`); r.g.style.opacity = vis;
+  });
+  TRAV2.forEach(r => {
+    const vis = snapped ? 0 : prog(t, 19.15, 19.45); const q = tangles[r.ti]._q;
+    const u = easeInOut(pingpong(r.ph + Math.max(0, tm - 19.0) * r.sp)); const [x, y] = qpt(...q, u);
+    r.g.setAttribute('transform', `translate(${x},${y})`); r.g.style.opacity = vis;
+  });
+  solid.forEach((e, i) => { const p = easeOut(prog(t, snapT + i * .06, snapT + .28 + i * .06)); e.setAttribute('stroke-dashoffset', e._L * (1 - p)); e.style.opacity = snapped ? 1 : 0; });
+  flows.forEach(f => {
+    const [a, b] = EDGES[f.ei]; const u = ((f.ph + Math.max(0, t - 21.15) * 1.1) % 1);
+    f.c.setAttribute('cx', lerp(P[a][0], P[b][0], u)); f.c.setAttribute('cy', lerp(P[a][1], P[b][1], u));
+    f.c.style.opacity = t >= 21.15 ? Math.sin(Math.PI * u) : 0;
+  });
+}
+
+/* ======================= agenda ======================= */
+const AG = [['10:00', 'Quote request · Website', 'Call booked overnight'], ['11:30', 'New enquiry · Online store', 'Call booked overnight'], ['14:00', 'Support question', 'Answered automatically']];
+$('agItems').innerHTML = AG.map((a, i) => `<div class="item" id="ag${i}"><div class="tm">${a[0]}</div><div class="it"><div class="t1">${a[1]}</div><div class="t2">${a[2]}</div></div><svg width="44" height="44" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="${i < 2 ? '#f0562e' : '#2fb85f'}"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`).join('');
+
+/* ======================= grain ======================= */
+(function makeGrain() {
+  const c = document.createElement('canvas'); c.width = 360; c.height = 640; const x = c.getContext('2d');
+  const img = x.createImageData(360, 640); let s = 1234567;
+  for (let i = 0; i < img.data.length; i += 4) { s = (s * 1103515245 + 12345) & 0x7fffffff; const v = s % 256; img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255; }
+  x.putImageData(img, 0, 0);
+  $('grain').style.backgroundImage = `url(${c.toDataURL()})`;
+  $('grain').style.backgroundSize = '720px 1280px';
+})();
+
+/* ======================= scenes ======================= */
+const SCENES = [
+  ['sA', 0, 3.0, .05, (t) => renderHook(t)],
+  ['sB1', 3.0, 5.0, .05, (t) => { appear(nB1, t, 3.3, .3, -50, .94); $('scrB1').style.filter = 'brightness(.85)'; }],
+  ['sB2a', 5.0, 6.4, .03, (t) => {
+    const lines = [...$('mailBody').querySelectorAll('.sl')];
+    const sel = prog(t, 5.45, 5.95);
+    lines.forEach((l, i) => { const p = clamp(sel * 3 - i) * 100; l.style.background = `linear-gradient(90deg,rgba(47,109,240,.5) ${p}%,transparent ${p}%)`; });
+    const c = $('curB2'); const cp = easeInOut(prog(t, 5.15, 5.95));
+    c.style.left = lerp(112, 600, cp) + 'px'; c.style.top = lerp(905, 985, cp) + 'px';
+    appear($('keyC'), t, 6.0, .18, 20, .8);
+  }],
+  ['sB2b', 6.4, 8.0, .03, (t) => {
+    appear($('keyV'), t, 6.45, .18, 20, .8);
+    $('g37a').textContent = typed('Thu', t, 6.6, 6.8);
+    $('g37b').textContent = typed('J.', t, 6.85, 6.95);
+    const req = typed('Quote — website + booking', t, 7.0, 7.75);
+    $('g37c').innerHTML = req + (t < 7.85 ? '<span class="caret"></span>' : '');
+    $('g37d').innerHTML = t > 7.8 ? '<span style="color:#ff9a3d">To reply</span>' : '';
+  }],
+  ['sB3', 8.0, 9.0, .03, (t) => {
+    const win = [[8.02, 8.12], [8.14, 8.36], [8.38, 8.6], [8.62, 8.95]];
+    CRM_FIELDS.forEach((f, i) => { const el = $('cf' + i); el.textContent = typed(f[1], t, win[i][0], win[i][1]); el.classList.toggle('focus', t >= win[i][0] && t < (win[i + 1] ? win[i + 1][0] : 9)); });
+  }],
+  ['sB45', 9.0, 13.0, .04, (t) => {
+    const p = easeInOut(prog(t, 9.1, 9.7)); $('tlFill').style.width = (p * 100) + '%';
+    const stamps = ['THU 9:47 PM', 'FRI 9:30 AM', 'FRI 4:15 PM', 'SAT 11:20 AM']; $('tlEnd').textContent = stamps[Math.min(3, Math.floor(p * 3.999))];
+    $('tlEnd').style.color = p >= 1 ? '#ff9a3d' : '#8b93a3';
+    appear($('mReply'), t, 9.55, .3, 30); appear($('mGone'), t, 11.15, .3, 30);
+    const dim = lerp(1, .28, easeInOut(prog(t, 11.55, 12.6)));
+    $('mFirst').style.opacity = dim; $('tlRow').style.opacity = dim;
+    if (t >= 9.85) $('mReply').style.opacity = dim;
+    $('dimB5').style.opacity = .5 * easeInOut(prog(t, 11.6, 12.9));
+  }],
+  ['sC1', 13.0, 15.0, 0, null],
+  ['sC', 15.0, 22.0, .03, (t) => renderGraph(t)],
+  ['sD0', 22.0, 22.45, 0, (t) => {
+    const p = prog(t, 22.0, 22.45); const st = ['SAT 11:20 AM', 'FRI 4:15 PM', 'FRI 9:30 AM', 'THU 9:47 PM'];
+    const el = $('rwTxt'); el.textContent = st[Math.min(3, Math.floor(p * 4))];
+    const j = Math.sin(t * 90) * 14; el.style.transform = `translateX(${j}px)`;
+    el.style.textShadow = `0 0 30px rgba(255,154,61,.55)`; el.style.filter = `blur(${Math.abs(j) / 9}px)`;
+  }],
+  ['sD1', 22.45, 24.0, .05, (t) => { appear(nD1, t, 22.6, .32, -50, .94); }],
+  ['sD2', 24.0, 28.0, .02, (t) => {
+    appear($('bMe'), t, 24.05, .25, 20);
+    const ty = $('bTyping'); ty.style.opacity = (t >= 24.3 && t < 24.8) ? 1 : 0;
+    [...ty.children].forEach((d, i) => d.style.transform = `translateY(${-8 * Math.max(0, Math.sin((t * 9) - i * .9))}px)`);
+    appear($('bAi'), t, 24.8, .28, 20);
+    appear($('chReplied'), t, 25.05, .25, 10);
+    const slotsOn = t >= 25.3 && t < 26.05; const slotIn = prog(t, 25.3, 25.55);
+    ['slot1', 'slot2'].forEach((s, i) => { const e = $(s); e.style.opacity = slotsOn ? easeOut(slotIn) : 0; e.classList.toggle('pick', i === 0 && t >= 25.8); e.style.transform = `scale(${i === 0 && t >= 25.8 ? lerp(.92, 1, easeBack(prog(t, 25.8, 26.0))) : 1})`; });
+    const cf = $('cConfirm'); if (t < 26.05) cf.style.opacity = 0; else appear(cf, t, 26.05, .3, 20, .9);
+    const crm = $('crmCard'); const cp = easeOut(prog(t, 26.8, 27.15)); crm.style.opacity = cp; crm.style.transform = `translateX(${(1 - cp) * 120}px)`;
+  }],
+  ['sD3', 28.0, 31.0, .03, (t) => { [0, 1, 2].forEach(i => appear($('ag' + i), t, 28.25 + i * .2, .3, 30)); $('sunrise').style.opacity = .6 + .4 * easeOut(prog(t, 28.0, 29.5)); }],
+  ['sE1', 31.0, 33.0, .03, (t) => { appear($('e1Mark'), t, 31.1, .4, 0, .8); appear($('e1Word'), t, 31.35, .35, 30); appear($('e1Tag'), t, 31.65, .35, 20); }],
+  ['sE2', 33.0, 38.0, .025, (t) => {
+    const d = $('doc'); const p = easeOut(prog(t, 33.1, 33.5)); d.style.opacity = p; d.style.transform = `translateY(${(1 - p) * 70}px) rotate(${(1 - p) * 2.5}deg)`;
+    appear($('badge48'), t, wordTime('e2', '48') - .05, .35, 0, .5);
+    $('badge48').style.transform += ` rotate(-8deg)`;
+    [['ck1', 'scope'], ['ck2', 'timeline'], ['ck3', 'price']].forEach(([id, w]) => appear($(id), t, wordTime('e2', w), .3, 0, .4));
+  }],
+  ['sF1', 38.0, 39.6, 0, null],
+  ['sF2', 39.6, 44.5, .02, (t) => {
+    appear($('fLogo'), t, 39.6, .35, -20); appear($('fPre'), t, 39.7, .35, 20);
+    const pill = $('fPill'); const p = prog(t, 41.15, 41.5);
+    pill.style.opacity = easeOut(p);
+    const glow = t > 41.5 ? .5 + .5 * Math.sin((t - 41.5) * 3.2) : 0;
+    pill.style.transform = `translateX(-50%) scale(${lerp(.82, 1, easeBack(p)) + .012 * glow})`;
+    pill.style.boxShadow = `0 24px ${60 + 30 * glow}px -18px rgba(240,86,46,${.75 + .2 * glow})`;
+    appear($('fBio'), t, 41.7, .3, 16); appear($('fTrust'), t, 42.0, .3, 16);
+  }],
+].map(([id, a, b, push, fn]) => ({ el: $(id), a, b, push, fn }));
+
+function render(t) {
+  for (const sc of SCENES) {
+    const on = t >= sc.a && t < sc.b; sc.el.style.display = on ? 'block' : 'none';
+    if (!on) continue;
+    sc.el.style.transform = `scale(${1 + sc.push * easeInOut(prog(t, sc.a, sc.b))})`;
+    sc.fn && sc.fn(t);
+  }
+  renderCaptions(t);
+  // world colour: cool before the turn, dark during the insight, warm after "Better systems"
+  const cool = t < 13 ? 1 : t < 20.9 ? .35 : 0;
+  $('bgCool').style.opacity = cool;
+  $('bgWarm').style.opacity = t < 20.9 ? 0 : easeOut(prog(t, 20.9, 21.4));
+  const f = Math.floor(t * 30); $('grain').style.backgroundPosition = `${(f * 137) % 720}px ${(f * 251) % 1280}px`;
+}
+
+buildHeadlines();
+const FONT_LOADS = ['600 40px Poppins', '700 40px Poppins', '800 40px Poppins', '400 40px Inter', '500 40px Inter', '600 40px Inter', '400 40px JB', '500 40px JB'];
+window.ready = Promise.all(FONT_LOADS.map(f => document.fonts.load(f))).then(() => document.fonts.ready).then(() => Promise.all([...document.images].map(i => i.decode()))).then(() => { fitHeadlines(); render(0); return true; });
+window.render = render;
+</script>
+</body>
+</html>
