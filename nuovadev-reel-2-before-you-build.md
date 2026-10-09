@@ -36,7 +36,7 @@
 | `video2/` | Source: timeline, renderer, soundtrack and cover. `./build.sh` rebuilds everything. |
 | `video2/photos.json` · `fetch_photos.py` | Six photographic backgrounds generated with Figma AI (see below). The renderer uses them automatically once they're downloaded into `video2/assets/photos/`. |
 
-**Photographic backgrounds.** Six photorealistic stills were generated for the reel: a founder at a desk at night (Scene 1), an overhead notebook with an app sketch (Scene 2), a wall of sticky notes (Scene 3), a bright morning desk (Scenes 4 and 7), a user test at a café (Scene 5), and a developer and founder reviewing a laptop (Scene 6). Each sits behind the interface under a brand-coloured gradient, with a slow push-in. Download them with `python3 video2/fetch_photos.py`, which needs network access to www.figma.com, within 7 days of 9 October 2026. Then run `./video2/build.sh`. Until they're downloaded, each scene falls back to the plain brand background.
+**Photographic backgrounds.** Six photorealistic stills were generated for the reel: a founder at a desk at night (Scene 1), an overhead notebook with an app sketch (Scene 2), a wall of sticky notes (Scene 3), a bright morning desk (Scenes 4 and 7), a user test at a café (Scene 5), and a developer and founder reviewing a laptop (Scene 6). Each sits behind the interface under a brand-coloured gradient, with a slow push-in. **They are included in the delivered video.** The originals are in `video2/assets/photos/`, and `python3 video2/fetch_photos.py` re-prepares them at 1080 × 1920.
 
 ---
 
@@ -148,7 +148,7 @@ That lighting change is the live-action version of the ink-to-light shift.
 
 **Shot 1A (00:00.00–00:03.03):** a single shot.
 - **Screen content:** a dark panel titled "Build estimate · Product v3" with a "DRAFT" tag. It lists six rows, each a feature tagged "v1": iOS & Android apps; Web dashboard; Chat & messaging; AI recommendations; Payments & subscriptions; Gamification. A totals strip reads "Estimated build: 9 months" and "Budget:" followed by an amount **blurred until unreadable**. No figure is ever legible.
-- **Frame 1:** the whole estimate card is in frame (x 110–970, y 570–1260), floating over the photo of the founder at night. The top rows are slightly out of focus and the totals strip is sharp. The card drifts up 26 px and grows 3% over the shot.
+- **Frame 1:** the photo of the founder at night fills the frame, her face lit by the laptop on the right. The estimate card floats at the left, over the laptop side (about 610 px wide, y 770–1270), so it never covers her face. The top rows are slightly out of focus and the totals strip is sharp. The card drifts up 22 px over the shot.
 - **Subject action:** the founder is visible only as a soft shape behind the screen (Path 1). They scroll the trackpad once, and the scroll stops with "Budget" centred. They stay still: no frown, no head-shake.
 - **AI prompt:** *Cinematic close-up over a laptop screen on a wooden desk at night, warm desk lamp, a founder's face softly out of focus behind the screen, shallow depth of field, slow push-in, photorealistic, 9:16.*
 
@@ -202,7 +202,7 @@ That lighting change is the live-action version of the ink-to-light shift.
 | Beat | Time | Visual | Subject action (Path 1) |
 |---|---|---|---|
 | Build | 23.88 | The prototype assembles block by block: header, then tasks, then button | Insert: the screen building |
-| Test | 24.91 | A green-dot tag "LIVE TEST · REAL USER" appears above the phone. Three tap ripples follow: "+ New task", then a task row, then its checkbox. | The **test user** holds the phone across a table and taps naturally. The founder watches. |
+| Test | 24.91 | The phone steps aside and the white overlay clears, so the café photo of two people testing the app fills the frame. A white pill tag "LIVE TEST · REAL USER" appears at top-left. | The **test user** holds the phone across a table and taps naturally. The founder watches. |
 | Learn | 25.95 | A "Feedback" card slides in: ✓ Added a task unaided · ✓ Came back to tick it off · ! Couldn't find reminders | The founder writes in the notebook |
 | Improve | 26.79 | The new-task sheet now includes a highlighted "Remind me" toggle, and the "!" note becomes ✓ "Found reminders" | The founder adjusts the design on the laptop |
 

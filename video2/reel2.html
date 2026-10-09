@@ -140,7 +140,7 @@ svg{display:block}
 
   <!-- ============ S1 · hook: the build estimate ============ -->
   <div class="scene" id="s1">
-    <div class="ipanel" id="est" style="left:110px;top:570px;width:860px;height:690px;background:rgba(23,27,34,.9);transform-origin:50% 100%">
+    <div class="ipanel" id="est" style="left:44px;top:770px;width:860px;height:690px;background:rgba(23,27,34,.88);transform-origin:0 0">
       <div class="ihead"><span class="t">Build estimate · Product v3</span><span class="m">DRAFT</span></div>
       <div id="estRows"></div>
       <div id="estTotal" style="position:absolute;left:0;right:0;bottom:0;padding:24px 32px 28px;background:#1b2029;border-top:2px solid var(--ink-line)">
@@ -205,7 +205,7 @@ svg{display:block}
   <!-- ============ S5 · build → test → learn → improve ============ -->
   <div class="scene" id="s5">
     <div class="phone" id="p5" style="left:110px;top:470px;width:430px;height:900px"><div class="scr"><div class="isl"></div><div class="app" id="app5"></div></div></div>
-    <div class="abs mono" id="liveTag" style="left:110px;top:418px;font-size:21px;color:var(--body);display:flex;align-items:center;gap:10px;opacity:0"><i style="width:14px;height:14px;border-radius:50%;background:#2fb85f;display:inline-block"></i>Live test · real user</div>
+    <div class="abs mono" id="liveTag" style="left:110px;top:404px;font-size:21px;color:var(--ink);display:flex;align-items:center;gap:10px;opacity:0;background:#fff;padding:10px 18px;border-radius:100px;box-shadow:var(--shadow-soft)"><i style="width:14px;height:14px;border-radius:50%;background:#2fb85f;display:inline-block"></i>Live test · real user</div>
     <div class="lcard" id="fb" style="left:590px;top:600px;width:420px;padding:30px 30px 20px">
       <div class="eyeb" style="font-size:20px">Feedback</div>
       <div id="fbRows" style="margin-top:16px"></div>
@@ -426,7 +426,7 @@ function tap(el, t, at, x, y) { const p = prog(t, at, at + .45); el.style.left =
 const R = {
   s1(t) {
     const p = eio(prog(t, 0, SC.s1.end));
-    $('est').style.transform = `perspective(1800px) rotateX(${lerp(7, 3, p)}deg) translateY(${lerp(26, 0, p)}px) scale(${lerp(1, 1.03, p)})`;
+    $('est').style.transform = `translateY(${lerp(22, 0, p)}px) scale(${lerp(.71, .73, p)})`;
     [...$('estRows').children].forEach((r, i) => r.style.filter = `blur(${clamp((4 - i) * .5, 0, 2)}px)`); // focus falls on the totals
   },
   s2(t) {
@@ -504,6 +504,7 @@ const R = {
     const fixed = t >= b[3] + .5; const w = $('fb2'); w.querySelector('span:last-child').textContent = fixed ? 'Found reminders' : "Couldn't find reminders";
     const icon = w.querySelector('span'); icon.className = fixed ? 'ck' : 'x'; icon.innerHTML = fixed ? CHECK : '!'; icon.style.cssText = fixed ? '' : 'border-color:#ff9a3d;color:#ff9a3d;font:700 22px Inter;display:flex;align-items:center;justify-content:center';
     $('p5').style.transform = `scale(${lerp(1, 1.03, prog(t, SC.s5.start, SC.s5.end))})`;
+    $('p5').style.opacity = t < b[1] - .05 ? 1 : t < b[3] - .1 ? 1 - eo(prog(t, b[1] - .05, b[1] + .2)) : eo(prog(t, b[3] - .1, b[3] + .2));
   },
   s6(t) {
     const a = SC.s6.start, cardsAt = ct('with a focused') - .05;
@@ -568,6 +569,10 @@ function renderPhotos(t) {
     if (id === 'pw3') f = 'blur(6px) brightness(.7)';
     if (id === 'pw4' && t >= SC.s7.start) f = 'blur(12px)';
     if (id === 'pw6') { const c = prog(t, cardsAt - .45, cardsAt); f = `blur(${14 * c}px)`; }
+    if (id === 'pw5') { // Build: veiled · Test: the people, clear · Learn: half · Improve: veiled again
+      const b1 = wt('of real users', 'real') - .2, b2 = ct('Learn'), b3 = ct('Improve');
+      scrim = t < b1 - .1 ? 1 : t < b2 - .1 ? lerp(1, .12, eo(prog(t, b1 - .1, b1 + .15))) : t < b3 - .1 ? lerp(.12, .55, eo(prog(t, b2 - .1, b2 + .15))) : lerp(.55, 1, eo(prog(t, b3 - .1, b3 + .15)));
+    }
     img.style.filter = f; img.style.transform = `scale(${lerp(1.04, 1.12, p)})`; w.lastChild.style.opacity = scrim;
   }
 }

@@ -4,37 +4,30 @@
 <meta charset="utf-8">
 <title>NuovaDev reel 2 cover</title>
 <style>
-@font-face{font-family:'Poppins';font-weight:700;src:url(../video/assets/fonts/poppins-latin-700-normal.woff2) format('woff2')}
 @font-face{font-family:'Poppins';font-weight:800;src:url(../video/assets/fonts/poppins-latin-800-normal.woff2) format('woff2')}
 @font-face{font-family:'Inter';font-weight:500;src:url(../video/assets/fonts/inter-latin-500-normal.woff2) format('woff2')}
 @font-face{font-family:'JB';font-weight:500;src:url(../video/assets/fonts/jetbrains-mono-latin-500-normal.woff2) format('woff2')}
 *{margin:0;padding:0;box-sizing:border-box}
 body{width:1080px;height:1920px;overflow:hidden;background:#0e1117;color:#fff;font-family:Inter;position:relative}
-.bg{position:absolute;inset:0;background:radial-gradient(60% 34% at 90% 62%,rgba(240,86,46,.32),transparent 70%),radial-gradient(50% 30% at 0% 100%,rgba(255,154,61,.14),transparent 70%)}
+.photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 50%}
+/* ink scrim keeps the headline side dark and the founder (right) visible */
+.scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(14,17,23,.92) 0%,rgba(14,17,23,.62) 46%,rgba(14,17,23,.1) 78%),linear-gradient(180deg,rgba(14,17,23,.55) 0%,transparent 30%,transparent 72%,rgba(14,17,23,.85) 100%)}
 .g{background:linear-gradient(100deg,#f0562e,#ff9a3d);-webkit-background-clip:text;background-clip:text;color:transparent}
 /* Everything that matters sits inside the 3:4 grid crop: y 240–1680. */
 .logo{position:absolute;top:300px;left:90px;display:flex;align-items:center;gap:16px;font:800 46px Poppins;letter-spacing:-0.03em}
 .eb{position:absolute;top:430px;left:90px;font:500 26px JB;letter-spacing:.16em;color:#ff9a3d;display:flex;align-items:center;gap:14px}
 .eb::before{content:'';width:36px;height:2px;background:#ff9a3d}
-h1{position:absolute;top:480px;left:86px;font:800 132px Poppins;line-height:1;letter-spacing:-0.04em}
-.phone{position:absolute;left:560px;top:880px;width:420px;height:880px;border-radius:66px;background:#0b0d11;padding:14px;box-shadow:0 0 0 2px #2b313d,0 70px 120px -40px rgba(0,0,0,.9);transform:rotate(8deg)}
-.scr{width:100%;height:100%;border-radius:54px;background:#fff;overflow:hidden;color:#0e1117;padding:84px 24px 0}
-.scr h3{font:700 50px Poppins;letter-spacing:-0.02em;padding-left:8px}
-.scr .sub{font:500 18px JB;letter-spacing:.12em;color:#68717f;padding:8px 8px 20px}
-.task{height:82px;border-radius:20px;background:#f6f7f9;border:2px solid #eef0f4;display:flex;align-items:center;gap:14px;padding:0 18px;font:500 23px Inter;margin-bottom:14px;white-space:nowrap}
-.task i{width:34px;height:34px;border-radius:10px;border:3px solid #c3c8d2;flex:none}
-.task.d i{background:linear-gradient(100deg,#f0562e,#ff9a3d);border-color:transparent}
-.sub2{position:absolute;top:1300px;left:90px;width:440px;font:500 40px Inter;color:#9aa2ae;line-height:1.3}
+h1{position:absolute;top:480px;left:86px;font:800 132px Poppins;line-height:1;letter-spacing:-0.04em;text-shadow:0 10px 40px rgba(0,0,0,.35)}
+.sub2{position:absolute;top:1430px;left:90px;width:520px;font:500 40px Inter;color:#c9cfd8;line-height:1.3}
 .sub2 b{color:#fff;font-weight:500}
 </style>
 </head>
 <body>
-<div class="bg"></div>
+<img class="photo" src="assets/photos/s1-founder-night.jpg">
+<div class="scrim"></div>
 <div class="logo"><img src="assets/logo-mark-dark.png" style="width:72px;height:56px"><span>Nuova<span class="g">Dev</span></span></div>
 <div class="eb">MVP DEVELOPMENT</div>
 <h1>Before<br>you build<br><span class="g">your app</span>…</h1>
-<div class="phone"><div class="scr"><h3>Today</h3><div class="sub">ILLUSTRATIVE APP</div>
-  <div class="task d"><i></i>Send investor update</div><div class="task"><i></i>Book venue for launch</div><div class="task"><i></i>Review pricing page</div></div></div>
 <div class="sub2">Prove people want it <b>before you build it all.</b></div>
 </body>
 </html>
