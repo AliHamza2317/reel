@@ -39,6 +39,37 @@ svg{display:block}
 #lightWorld .grid{position:absolute;inset:0;background-image:linear-gradient(#eef0f4 2px,transparent 2px),linear-gradient(90deg,#eef0f4 2px,transparent 2px);background-size:96px 96px;-webkit-mask-image:radial-gradient(75% 45% at 50% 28%,#000 25%,transparent 80%)}
 #lightWorld .blobs{position:absolute;inset:0;background:radial-gradient(40% 24% at 96% 10%,rgba(255,154,61,.42),transparent 70%),radial-gradient(34% 20% at 82% 22%,rgba(240,86,46,.20),transparent 70%),radial-gradient(55% 26% at -5% 92%,rgba(255,225,211,.95),transparent 70%)}
 
+/* photo layers (generated stills; each is optional and falls back to the brand background) */
+.pw{position:absolute;inset:0;display:none;overflow:hidden}
+.pw img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:50% 45%}
+.pw .scrim{position:absolute;inset:0}
+.pw.dk .scrim{background:linear-gradient(180deg,rgba(14,17,23,.94) 0%,rgba(14,17,23,.62) 24%,rgba(14,17,23,.38) 50%,rgba(14,17,23,.88) 100%)}
+.pw.lt .scrim{background:linear-gradient(180deg,rgba(255,255,255,.96) 0%,rgba(255,255,255,.74) 24%,rgba(255,255,255,.5) 54%,rgba(255,255,255,.92) 100%)}
+
+/* the founder's ambitious concept (S2) */
+.idea{position:absolute;inset:0;background:#10141a;color:#fff;font-family:Inter;padding:78px 26px 0}
+.idea .hd{display:flex;align-items:center;gap:16px}
+.idea .av{width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#ffb27a,#f0562e);display:flex;align-items:center;justify-content:center;font:700 26px Poppins}
+.idea .hi{font:600 25px Poppins;letter-spacing:-0.01em;white-space:nowrap}
+.idea .hs{font:500 19px JB;color:#9aa2ae;letter-spacing:.08em;margin-top:2px}
+.idea .bell{margin-left:auto;width:56px;height:56px;border-radius:16px;background:#1b2029;display:flex;align-items:center;justify-content:center;position:relative}
+.idea .bell i{position:absolute;top:10px;right:11px;width:12px;height:12px;border-radius:50%;background:#f0562e}
+.idea .ai{margin-top:24px;border-radius:24px;padding:22px 22px;background:linear-gradient(135deg,rgba(240,86,46,.28),rgba(255,154,61,.12));border:1.5px solid rgba(255,154,61,.45)}
+.idea .ai b{display:block;font:600 26px Poppins}
+.idea .ai span{font:500 21px Inter;color:#d5d9e0}
+.idea .grid4{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.idea .ft{border-radius:20px;background:#1b2029;border:1.5px solid #262b34;padding:16px 16px;display:flex;flex-direction:column;gap:10px}
+.idea .ft .ic{width:44px;height:44px;border-radius:12px;background:#262c38;display:flex;align-items:center;justify-content:center}
+.idea .ft b{font:600 21px Inter} .idea .ft span{font:500 17px JB;color:#9aa2ae;letter-spacing:.06em}
+.idea .tl{margin-top:18px;border-radius:18px;background:#1b2029;padding:16px 18px;display:flex;align-items:center;gap:14px;font:500 21px Inter}
+.idea .tl i{width:28px;height:28px;border-radius:9px;border:2.5px solid #4b5361}
+.idea .tabs{position:absolute;left:0;right:0;bottom:0;height:96px;background:#151a22;border-top:1.5px solid #222833;display:flex;justify-content:space-around;align-items:center}
+.idea .tabs span{width:34px;height:34px;border-radius:10px;background:#2b313d}
+.idea .tabs span.on{background:var(--grad)}
+.sticker{position:absolute;padding:14px 24px;border-radius:16px;background:#ff9a3d;color:#1a1206;font:600 27px Inter;box-shadow:0 18px 40px -12px rgba(0,0,0,.7);z-index:6;white-space:nowrap}
+.who{position:absolute;width:118px;height:118px;border-radius:50%;background:rgba(23,27,34,.92);border:2px solid #3a414d;display:flex;align-items:center;justify-content:center;z-index:6}
+.who b{position:absolute;right:-6px;top:-6px;width:44px;height:44px;border-radius:50%;background:var(--grad);font:700 26px Poppins;display:flex;align-items:center;justify-content:center;color:#fff}
+
 /* on-screen headline overlays */
 .ov{position:absolute;left:72px;right:72px;top:236px;font-family:Poppins;font-weight:800;letter-spacing:-0.035em;line-height:1.04;font-size:92px;display:none;z-index:30}
 .ov.light{color:var(--ink)} .ov.dark{color:#fff}
@@ -79,10 +110,10 @@ svg{display:block}
 .app .sb{height:70px}
 .app h3{font:700 54px Poppins;letter-spacing:-0.02em;padding:22px 36px 0}
 .app .sub{font:500 22px JB;letter-spacing:.1em;color:var(--faint);padding:8px 36px 18px;text-transform:uppercase}
-.task{margin:0 22px 16px;height:92px;border-radius:22px;background:var(--soft);border:2px solid var(--soft2);display:flex;align-items:center;gap:16px;padding:0 20px;font:500 25px Inter;white-space:nowrap;overflow:hidden}
+.task{margin:0 22px 12px;height:84px;border-radius:22px;background:var(--soft);border:2px solid var(--soft2);display:flex;align-items:center;gap:16px;padding:0 20px;font:500 25px Inter;white-space:nowrap;overflow:hidden}
 .task .box{width:38px;height:38px;border-radius:12px;border:3px solid #c3c8d2;flex:none;display:flex;align-items:center;justify-content:center}
 .task.done .box{background:var(--grad);border-color:transparent}
-.fab{position:absolute;left:26px;right:26px;bottom:110px;height:92px;border-radius:46px;background:var(--ink);color:#fff;font:600 30px Inter;display:flex;align-items:center;justify-content:center;gap:12px}
+.fab{position:absolute;left:26px;right:26px;bottom:120px;height:92px;border-radius:46px;background:var(--ink);color:#fff;font:600 30px Inter;display:flex;align-items:center;justify-content:center;gap:12px}
 .sheet{position:absolute;left:0;right:0;bottom:0;height:520px;background:#fff;border-radius:40px 40px 0 0;box-shadow:0 -20px 60px -20px rgba(14,17,23,.3);padding:20px 30px;z-index:4}
 .sheet .grab{width:80px;height:8px;border-radius:4px;background:var(--line2);margin:0 auto 26px}
 .sheet .lab{font:500 22px JB;letter-spacing:.1em;color:var(--faint);margin-bottom:12px}
@@ -104,22 +135,17 @@ svg{display:block}
 </head>
 <body>
 <div id="stage">
-  <div class="layer" id="inkWorld"></div>
-  <div class="layer" id="lightWorld"><div class="grid"></div><div class="blobs"></div></div>
+  <div class="layer" id="inkWorld"><div class="pw" id="pw1"></div><div class="pw" id="pw2"></div><div class="pw" id="pw3"></div></div>
+  <div class="layer" id="lightWorld"><div class="grid"></div><div class="blobs"></div><div class="pw" id="pw4"></div><div class="pw" id="pw5"></div><div class="pw" id="pw6"></div></div>
 
   <!-- ============ S1 · hook: the build estimate ============ -->
   <div class="scene" id="s1">
-    <div class="layer" style="z-index:2;background:linear-gradient(180deg,rgba(14,17,23,.95) 0%,rgba(14,17,23,.75) 26%,transparent 44%)"></div>
-    <div class="layer" id="s1cam" style="transform-origin:540px 900px">
-      <div class="abs" style="left:-80px;top:1500px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(255,154,61,.35),transparent 65%);filter:blur(30px)"></div>
-      <div class="abs" style="left:860px;top:380px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(240,86,46,.28),transparent 65%);filter:blur(30px)"></div>
-      <div class="ipanel" id="est" style="left:90px;top:560px;width:900px;height:860px;transform:perspective(1800px) rotateY(-9deg) rotateX(5deg)">
-        <div class="ihead"><span class="t">Build estimate · Product v3</span><span class="m">DRAFT</span></div>
-        <div id="estRows"></div>
-        <div id="estTotal" style="position:absolute;left:0;right:0;bottom:0;padding:26px 32px 30px;background:#1b2029;border-top:2px solid var(--ink-line)">
-          <div style="display:flex;justify-content:space-between;font:500 30px Inter;color:#9aa2ae"><span>Estimated build</span><span style="color:#fff;font-weight:600">9 months</span></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;font:500 30px Inter;color:#9aa2ae"><span>Budget</span><span style="font:700 56px Poppins;color:#fff;filter:blur(15px)">€ 86,400</span></div>
-        </div>
+    <div class="ipanel" id="est" style="left:110px;top:570px;width:860px;height:690px;background:rgba(23,27,34,.9);transform-origin:50% 100%">
+      <div class="ihead"><span class="t">Build estimate · Product v3</span><span class="m">DRAFT</span></div>
+      <div id="estRows"></div>
+      <div id="estTotal" style="position:absolute;left:0;right:0;bottom:0;padding:24px 32px 28px;background:#1b2029;border-top:2px solid var(--ink-line)">
+        <div style="display:flex;justify-content:space-between;font:500 30px Inter;color:#9aa2ae"><span>Estimated build</span><span style="color:#fff;font-weight:600">9 months</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;font:500 30px Inter;color:#9aa2ae"><span>Budget</span><span style="font:700 54px Poppins;color:#fff;filter:blur(15px)">€ 86,400</span></div>
       </div>
     </div>
   </div>
@@ -130,7 +156,9 @@ svg{display:block}
       <div class="abs" id="paper" style="left:70px;top:470px;width:940px;height:1000px;border-radius:14px;background:#f3efe6;box-shadow:0 50px 100px -40px rgba(0,0,0,.9);transform:rotate(-3deg)">
         <div class="layer" style="background:repeating-linear-gradient(0deg,transparent 0 58px,rgba(110,130,170,.18) 58px 60px);border-radius:14px"></div>
       </div>
-      <div class="phone" id="wfPhone" style="left:290px;top:500px;width:500px;height:940px;opacity:0;background:#0b0d11"><div class="scr" style="background:#151a22"></div></div>
+      <div class="phone" id="wfPhone" style="left:290px;top:500px;width:500px;height:940px;opacity:0;background:#0b0d11"><div class="scr" style="background:#10141a"><div class="isl"></div><div class="idea" id="idea"></div></div></div>
+      <div class="sticker" id="untested" style="left:585px;top:508px;opacity:0">Not tested with users yet</div>
+      <div class="who" id="who0" style="left:92px;top:720px;opacity:0"></div><div class="who" id="who1" style="left:872px;top:900px;opacity:0"></div><div class="who" id="who2" style="left:112px;top:1090px;opacity:0"></div>
       <svg class="layer" id="sk" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
       <svg class="abs" id="cur2" width="46" height="46" viewBox="0 0 24 24" style="opacity:0"><path d="M4 2l15 9-6.5 1.6L9 19z" fill="#fff" stroke="#0e1117" stroke-width="1.4" stroke-linejoin="round"/></svg>
       <div class="layer" id="s2dim" style="background:radial-gradient(60% 40% at 50% 52%,transparent 35%,rgba(5,6,9,.75) 100%);opacity:0"></div>
@@ -177,6 +205,7 @@ svg{display:block}
   <!-- ============ S5 · build → test → learn → improve ============ -->
   <div class="scene" id="s5">
     <div class="phone" id="p5" style="left:110px;top:470px;width:430px;height:900px"><div class="scr"><div class="isl"></div><div class="app" id="app5"></div></div></div>
+    <div class="abs mono" id="liveTag" style="left:110px;top:418px;font-size:21px;color:var(--body);display:flex;align-items:center;gap:10px;opacity:0"><i style="width:14px;height:14px;border-radius:50%;background:#2fb85f;display:inline-block"></i>Live test · real user</div>
     <div class="lcard" id="fb" style="left:590px;top:600px;width:420px;padding:30px 30px 20px">
       <div class="eyeb" style="font-size:20px">Feedback</div>
       <div id="fbRows" style="margin-top:16px"></div>
@@ -273,7 +302,7 @@ function renderCaptions(t) {
 }
 
 /* ===================== S1 build estimate ===================== */
-const EST = [['iOS & Android apps', 'v1'], ['Web dashboard', 'v1'], ['Admin panel', 'v1'], ['Chat & messaging', 'v1'], ['AI recommendations', 'v1'], ['Payments & subscriptions', 'v1'], ['Referral program', 'v1'], ['Multi-language', 'v1'], ['Gamification', 'v1']];
+const EST = [['iOS & Android apps', 'v1'], ['Web dashboard', 'v1'], ['Chat & messaging', 'v1'], ['AI recommendations', 'v1'], ['Payments & subscriptions', 'v1'], ['Gamification', 'v1']];
 $('estRows').innerHTML = EST.map(r => `<div class="irow"><span class="cb"></span>${r[0]}<span class="chip">${r[1]}</span></div>`).join('');
 
 /* ===================== S2 sketch → wireframe ===================== */
@@ -304,12 +333,21 @@ SHAPES.forEach(([tag, at]) => {
   const e = sv(tag, a, skG); sketchEls.push(e);
 });
 NOTES.forEach(d => sketchEls.push(sv('path', { d, 'stroke-width': 3.5, stroke: '#46607f' }, skG)));
-const wfG = sv('g', { opacity: 0 }, $('sk'));
-SHAPES.slice(1).forEach(([tag, at], i) => {
-  const a = { ...at }; if (a.x !== undefined) { a.x += PX; a.y += PY; } else { a.cx += PX; a.cy += PY; }
-  a.fill = i === 6 ? '#3a414d' : '#262b34'; sv(tag, a, wfG);
-});
-const wfBtnLabel = sv('text', { x: PX + 235, y: PY + 834, 'text-anchor': 'middle', fill: '#c9cfd8', 'font-family': 'Inter', 'font-weight': 600, 'font-size': 30 }, wfG); wfBtnLabel.textContent = 'Sign up';
+const ICO = {
+  chat: '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M4 4h16a1 1 0 011 1v11a1 1 0 01-1 1H8.5L4 21V5a1 1 0 011-1z" fill="#ff9a3d"/></svg>',
+  flame: '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2c1 4 6 6 6 12a6 6 0 01-12 0c0-3 2-5 3-6 0 2 1 3 2 3 0-3-1-6 1-9z" fill="#f0562e"/></svg>',
+  gift: '<svg width="24" height="24" viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="2" fill="#ff9a3d"/><rect x="2" y="6" width="20" height="4" rx="1.5" fill="#f0562e"/><path d="M12 6v15" stroke="#10141a" stroke-width="2"/></svg>',
+  cal: '<svg width="24" height="24" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="#ff9a3d" stroke-width="2.2"/><path d="M3 10h18M8 3v4M16 3v4" stroke="#ff9a3d" stroke-width="2.2"/></svg>',
+  bell: '<svg width="26" height="26" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0112 0v5l2 2H4z M10 20a2 2 0 004 0" fill="none" stroke="#c9cfd8" stroke-width="2" stroke-linejoin="round"/></svg>',
+  spark: '<svg width="30" height="30" viewBox="0 0 24 24"><path d="M12 2l2.3 6.4 6.7 2.3-6.7 2.3L12 19.4l-2.3-6.4L3 10.7l6.7-2.3z" fill="#ff9a3d"/></svg>',
+  user: '<svg width="58" height="58" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="#9aa2ae"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z" fill="#9aa2ae"/></svg>',
+};
+$('idea').innerHTML = `<div class="hd"><div class="av">S</div><div><div class="hi">Good evening, Sam</div><div class="hs">THURSDAY · 6 TASKS</div></div><div class="bell">${ICO.bell}<i></i></div></div>
+  <div class="ai"><div style="display:flex;gap:12px;align-items:center">${ICO.spark}<b>AI plan for today</b></div><span>Three tasks picked for you, ordered by impact</span></div>
+  <div class="grid4">${[['chat', 'Team chat', '3 NEW'], ['flame', 'Streak', '12 DAYS'], ['gift', 'Rewards', '240 PTS'], ['cal', 'Calendar', 'SYNCED']].map(([i, b, sp]) => `<div class="ft"><div class="ic">${ICO[i]}</div><b>${b}</b><span>${sp}</span></div>`).join('')}</div>
+  <div class="tl"><i></i>Send investor update</div><div class="tl" style="margin-top:12px"><i></i>Plan launch week</div>
+  <div class="tabs"><span class="on"></span><span></span><span></span><span></span><span></span></div>`;
+['who0', 'who1', 'who2'].forEach(id => $(id).innerHTML = ICO.user + '<b>?</b>');
 
 /* ===================== S3 ===================== */
 const FEATS = ['Sign up & login', 'Social login', 'User profiles', 'Dark mode', 'In-app chat', 'Push notifications', 'AI recommendations', 'Referral program', 'Admin dashboard', 'Analytics', 'Multi-language', 'Gamification', 'Payments', 'Subscriptions', 'Calendar sync', 'File uploads', 'Team workspaces', 'Comments', 'Activity feed', 'Search', 'Offline mode', 'Integrations', 'Custom themes', 'Video calls', 'Badges', 'Leaderboards', 'Export to PDF', 'Two-factor auth', 'Roles & permissions', 'Public API', 'Marketplace', 'Widgets', 'Voice notes', 'Smart reminders', 'Templates', 'Tags', 'Bulk edit', 'Audit log'];
@@ -325,15 +363,21 @@ const monthCells = [...document.querySelectorAll('.mc')];
 // S3e: a fan of mockups, then one lonely "Launch" screen
 const FAN = [[-26, -300, 40], [-13, -150, 10], [0, 0, 0], [13, 150, 10], [26, 300, 40]];
 $('s3e').innerHTML = FAN.map(([r, x, y], i) => `<div class="phone fan" style="left:${355 + x}px;top:${560 + y}px;width:370px;height:780px;border-radius:58px;padding:12px;transform:rotate(${r}deg);transform-origin:50% 120%"><div class="scr" style="border-radius:46px;background:#151a22">
-  ${i === 2 ? `<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px"><div style="font:700 44px Poppins;color:#fff">Product v3</div><div id="launchBtn" style="padding:22px 56px;border-radius:50px;background:var(--grad);font:600 32px Inter;color:#fff">Launch</div></div>`
+  ${i === 2 ? `<div style="position:absolute;inset:0;padding:74px 26px 0;color:#fff">
+      <div style="display:flex;align-items:center;gap:16px"><div style="width:66px;height:66px;border-radius:18px;background:var(--grad)"></div><div><div style="font:700 32px Poppins">Product v3</div><div style="font:500 17px JB;color:#9aa2ae;letter-spacing:.1em">LAUNCH CHECKLIST</div></div></div>
+      <div style="margin-top:26px">${['38 features built', 'Payments live', 'App store listing', 'Admin dashboard'].map(x => `<div style="display:flex;align-items:center;gap:14px;height:58px;font:500 23px Inter;border-bottom:1.5px solid #222833"><span style="width:30px;height:30px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center">${CHECK}</span>${x}</div>`).join('')}</div>
+      <div style="margin-top:22px;border-radius:18px;background:#1b2029;border:1.5px solid #3a414d;padding:18px 20px;display:flex;justify-content:space-between;align-items:center"><span style="font:500 21px Inter;color:#c9cfd8">Tested with real users</span><span style="font:700 34px Poppins;color:#ff9a3d">0</span></div>
+      <div id="launchBtn" style="position:absolute;left:26px;right:26px;bottom:44px;height:86px;border-radius:44px;background:var(--grad);font:600 30px Inter;color:#fff;display:flex;align-items:center;justify-content:center">Launch</div></div>`
     : `<div style="padding:70px 28px">${[90, 60, 75, 50, 80, 65].map(w => `<div style="height:56px;border-radius:14px;background:#1f2430;margin-bottom:16px;width:${w}%"></div>`).join('')}</div>`}</div></div>`).join('');
 const fans = [...document.querySelectorAll('.fan')];
 
 /* ===================== prototype app (fictional, S4/S5) ===================== */
 function appHtml(id) {
   return `<div class="sb"></div><h3>Today</h3><div class="sub">Illustrative app</div>
+  <div style="margin:0 22px 16px;border-radius:22px;background:var(--ink);color:#fff;padding:18px 22px"><div style="display:flex;justify-content:space-between;font:600 24px Inter"><span>Progress</span><span id="${id}Prog">0 of 3 done</span></div><div style="height:10px;border-radius:5px;background:#2b313d;margin-top:14px;overflow:hidden"><div id="${id}Bar" style="height:100%;width:0;background:var(--grad)"></div></div></div>
   <div id="${id}List"><div class="task" id="${id}New" style="opacity:0;height:0;margin-bottom:0"><span class="box"></span><span id="${id}NewTxt">Send investor update</span></div>
   <div class="task"><span class="box"></span>Book venue for launch</div><div class="task"><span class="box"></span>Review pricing page</div></div>
+  <div style="position:absolute;left:0;right:0;bottom:0;height:96px;border-top:2px solid var(--soft2);background:#fff;display:flex;justify-content:space-around;align-items:center"><span style="width:34px;height:34px;border-radius:10px;background:var(--grad)"></span><span style="width:34px;height:34px;border-radius:10px;background:var(--line2)"></span><span style="width:34px;height:34px;border-radius:10px;background:var(--line2)"></span></div>
   <div class="fab" id="${id}Fab"><span style="font-size:40px;line-height:0">+</span> New task</div>
   <div class="sheet" id="${id}Sheet"><div class="grab"></div><div class="lab">NEW TASK</div><div class="inp" id="${id}Inp"></div>
   <div id="${id}Rem" style="display:none;margin-top:18px;height:74px;border-radius:18px;border:3px solid var(--coral);display:flex;align-items:center;justify-content:space-between;padding:0 22px;font:500 28px Inter;color:var(--ink)"><span>Remind me</span><span style="width:76px;height:42px;border-radius:21px;background:var(--grad);position:relative"><i style="position:absolute;right:5px;top:5px;width:32px;height:32px;border-radius:50%;background:#fff"></i></span></div>
@@ -382,21 +426,22 @@ function tap(el, t, at, x, y) { const p = prog(t, at, at + .45); el.style.left =
 const R = {
   s1(t) {
     const p = eio(prog(t, 0, SC.s1.end));
-    $('s1cam').style.transform = `translate(${lerp(-70, -95, p)}px,${lerp(-410, -470, p)}px) scale(${lerp(1.26, 1.36, p)})`;
-    const rows = [...$('estRows').children];
-    rows.forEach((r, i) => r.style.filter = `blur(${clamp((9 - i) * .9, 0, 6)}px)`); // shallow depth of field: focus on the totals
+    $('est').style.transform = `perspective(1800px) rotateX(${lerp(7, 3, p)}deg) translateY(${lerp(26, 0, p)}px) scale(${lerp(1, 1.03, p)})`;
+    [...$('estRows').children].forEach((r, i) => r.style.filter = `blur(${clamp((4 - i) * .5, 0, 2)}px)`); // focus falls on the totals
   },
   s2(t) {
     const a = SC.s2.start, mc = ct('But have you') - .25; // match cut from pencil to pixels
     const draw = prog(t, a + .05, mc - .2);
     sketchEls.forEach((e, i) => { const L = e.getTotalLength(); e.setAttribute('stroke-dasharray', L); e.setAttribute('stroke-dashoffset', L * (1 - clamp(draw * sketchEls.length / 6 - i * .55))); });
     const cut = prog(t, mc, mc + .22);
-    $('paper').style.opacity = 1 - cut; skG.style.opacity = 1 - cut; wfG.setAttribute('opacity', cut); $('wfPhone').style.opacity = cut;
+    const sketchVis = HAS('pw2') ? 0 : 1 - cut; $('paper').style.opacity = sketchVis; skG.style.opacity = sketchVis; $('wfPhone').style.opacity = cut;
+    appear($('untested'), t, ct('But have you') + .35, .35, 0, .6); $('untested').style.transform += ' rotate(6deg)';
+    const pw = wt('that people', 'people'); ['who0', 'who1', 'who2'].forEach((id, i) => appear($(id), t, pw + i * .12, .35, 20, .7));
     const push = eio(prog(t, mc, SC.s2.end));
     $('s2cam').style.transform = `translateY(${lerp(60, 0, eio(prog(t, a, mc)))}px) scale(${lerp(1, 1.1, push)})`;
     const c = $('cur2'); const cp = eio(prog(t, mc + .3, wt('that people', 'actually') - .1));
-    c.style.opacity = cut; c.style.left = lerp(820, PX + 300, cp) + 'px'; c.style.top = lerp(1300, PY + 822, cp) + 'px';
-    $('s2dim').style.opacity = .9 * eio(prog(t, wt('that people', 'actually'), wt('that people', 'actually') + .8));
+    c.style.opacity = cut; c.style.left = lerp(820, PX + 330, cp) + 'px'; c.style.top = lerp(1250, PY + 250, cp) + 'px';
+    $('s2dim').style.opacity = .55 * eio(prog(t, wt('that people', 'actually'), wt('that people', 'actually') + .8));
   },
   s3(t) {
     const tB = ct('before getting') + .3, tC = ct('Months'), tD = ct('A growing'), tE = ct('And one');
@@ -443,10 +488,11 @@ const R = {
     const b = [SC.s5.start, wt('of real users', 'real') - .2, ct('Learn'), ct('Improve')];
     ['st0', 'st1', 'st2', 'st3'].forEach((id, i) => { const el = $(id); const on = t >= b[i] && (i === 3 || t < b[i + 1]); el.className = 'step' + (on ? ' on' : t >= b[i] ? ' past' : '');
       el.style.transform = `scale(${on ? lerp(1.12, 1, eo(prog(t, b[i], b[i] + .25))) : 1})`; });
+    appear($('liveTag'), t, b[1] - .05, .3, 10);
     // Build: screen assembles
     const app = $('app5'); [...app.querySelectorAll('h3,.sub,.task,.fab')].forEach((el, i) => { if (el.id === 'a5New') return; const e = appear(el, t, b[0] + i * .07, .3, 26); });
     // Test: someone taps through it
-    [[b[1] + .05, 200, 714], [b[1] + .4, 220, 266], [b[1] + .75, 69, 266]].forEach(([at, x, y], i) => { if (t >= at && t < at + .45) tap($('a5Tap'), t, at, x, y); });
+    [[b[1] + .05, 200, 704], [b[1] + .4, 220, 358], [b[1] + .75, 61, 358]].forEach(([at, x, y], i) => { if (t >= at && t < at + .45) tap($('a5Tap'), t, at, x, y); });
     if (t < b[1] || t > b[1] + 1.3) $('a5Tap').style.opacity = 0;
     $('a5Sheet').style.transform = `translateY(${t >= b[3] ? lerp(100, 0, eo(prog(t, b[3], b[3] + .3))) : 100}%)`;
     $('a5Inp').innerHTML = t >= b[3] ? 'Book venue for launch' : '';
@@ -489,16 +535,41 @@ const R = {
   },
 };
 function runApp(id, t, k) {
-  tap($(id + 'Tap'), t, k.fab, 205, 734);
+  tap($(id + 'Tap'), t, k.fab, 205, 724);
   const sheetUp = eo(prog(t, k.fab + .15, k.fab + .45)), sheetDown = eio(prog(t, k.add + .1, k.add + .4));
   $(id + 'Sheet').style.transform = `translateY(${lerp(100, 0, sheetUp) + sheetDown * 100}%)`;
   $(id + 'Inp').innerHTML = typed('Send investor update', t, k.type[0], k.type[1]) + (t > k.type[0] - .1 && t < k.add ? '<span class="caret"></span>' : '');
   if (t >= k.add && t < k.add + .45) tap($(id + 'Tap'), t, k.add, 205, 624);
   const nw = $(id + 'New'); const ni = eo(prog(t, k.add + .3, k.add + .6));
-  nw.style.opacity = ni; nw.style.height = lerp(0, 92, ni) + 'px'; nw.style.marginBottom = lerp(0, 16, ni) + 'px'; nw.style.borderColor = ni > 0 && t < k.done + .6 ? '#f0562e' : '';
-  const done = t >= k.done; nw.classList.toggle('done', done); nw.querySelector('.box').innerHTML = done ? CHECK : '';
+  nw.style.opacity = ni; nw.style.height = lerp(0, 84, ni) + 'px'; nw.style.marginBottom = lerp(0, 12, ni) + 'px'; nw.style.borderColor = ni > 0 && t < k.done + .6 ? '#f0562e' : '';
+  const done = t >= k.done; nw.classList.toggle('done', done);
+  $(id + 'Prog').textContent = done ? '1 of 3 done' : '0 of 3 done'; $(id + 'Bar').style.width = (33.3 * eo(prog(t, k.done, k.done + .4))) + '%'; nw.querySelector('.box').innerHTML = done ? CHECK : '';
   if (done) { nw.querySelector('.box').style.transform = `scale(${lerp(.6, 1, eb(prog(t, k.done, k.done + .3)))})`; $(id + 'NewTxt').style.color = '#9aa2ae'; }
   else $(id + 'NewTxt').style.color = '';
+}
+
+/* ===================== photos ===================== */
+const PHOTO = { pw1: ['s1-founder-night', 'dk'], pw2: ['s2-notebook', 'dk'], pw3: ['s3-wall', 'dk'], pw4: ['s4-desk', 'lt'], pw5: ['s5-test', 'lt'], pw6: ['s6-review', 'lt'] };
+const HAS = id => $(id).dataset.ok === '1';
+const photoLoads = Object.entries(PHOTO).map(([id, [name, cls]]) => new Promise(res => {
+  const w = $(id); w.classList.add(cls); const img = new Image();
+  img.onload = () => { w.appendChild(img); const sc = document.createElement('div'); sc.className = 'scrim'; w.appendChild(sc); w.dataset.ok = '1'; res(); };
+  img.onerror = () => res(); img.src = `assets/photos/${name}.jpg`;
+}));
+function renderPhotos(t) {
+  const endAt = ct("Let's figure") - .15, mc = ct('But have you') - .25, cardsAt = ct('with a focused') - .05;
+  const win = { pw1: [[0, SC.s1.end]], pw2: [[SC.s2.start, SC.s2.end]], pw3: [[SC.s3.start, SC.s3.end]], pw4: [[SC.s4.start, SC.s4.end], [SC.s7.start, endAt]], pw5: [[SC.s5.start, SC.s5.end]], pw6: [[SC.s6.start, SC.s6.end]] };
+  for (const id in win) {
+    const w = $(id); const seg = win[id].find(([a, b]) => t >= a && t < b);
+    w.style.display = HAS(id) && seg ? 'block' : 'none'; if (!seg || !HAS(id)) continue;
+    const img = w.firstChild, p = eio(prog(t, seg[0], seg[1]));
+    let f = 'none', scrim = 1;
+    if (id === 'pw2') { const c = prog(t, mc, mc + .3); f = `blur(${16 * c}px) brightness(${lerp(1, .55, c)})`; scrim = lerp(.55, 1, c); }
+    if (id === 'pw3') f = 'blur(6px) brightness(.7)';
+    if (id === 'pw4' && t >= SC.s7.start) f = 'blur(12px)';
+    if (id === 'pw6') { const c = prog(t, cardsAt - .45, cardsAt); f = `blur(${14 * c}px)`; }
+    img.style.filter = f; img.style.transform = `scale(${lerp(1.04, 1.12, p)})`; w.lastChild.style.opacity = scrim;
+  }
 }
 
 /* ===================== frame ===================== */
@@ -512,12 +583,13 @@ function render(t) {
     if (o.inAt === 0) { o.el.style.opacity = 1; o.el.style.transform = `scale(${lerp(1.05, 1, eo(prog(t, 0, .6)))})`; o.el.style.transformOrigin = '0 0'; } else appear(o.el, t, o.inAt, .35, 18); }
   if (t < SC.s6.start || t >= SC.s6.end) ov6.style.display = 'none';
   $('steps').style.display = t >= SC.s5.start && t < SC.s5.end ? 'flex' : 'none';
+  renderPhotos(t);
   renderCaptions(t);
   const f = Math.floor(t * 30); $('grain').style.backgroundPosition = `${(f * 137) % 720}px ${(f * 251) % 1280}px`;
   $('grain').style.opacity = lerp(.06, .035, rev);
 }
 const FONT_LOADS = ['600 40px Poppins', '700 40px Poppins', '800 40px Poppins', '400 40px Inter', '500 40px Inter', '600 40px Inter', '400 40px JB', '500 40px JB'];
-window.ready = Promise.all(FONT_LOADS.map(f => document.fonts.load(f))).then(() => document.fonts.ready)
+window.ready = Promise.all([...FONT_LOADS.map(f => document.fonts.load(f)), ...photoLoads]).then(() => document.fonts.ready)
   .then(() => Promise.all([...document.images].map(i => i.decode()))).then(() => { render(0); return true; });
 window.render = render;
 </script>

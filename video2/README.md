@@ -11,6 +11,7 @@ This folder builds `../output/nuovadev-reel-2*.*`, the motion version of `../nuo
 | `cover2.html` | The cover. Its text sits inside the 3:4 profile-grid crop. |
 | `assets/` | The website's logo marks, plus clean captures of the real nuovadev.com MVP and Contact pages, rendered from the website source. |
 | `build.sh` | Rebuilds everything into `../output`. |
+| `photos.json`, `fetch_photos.py` | Links to the six generated photographic backgrounds, and a script that downloads them into `assets/photos/` as 1080×1920 JPEGs. Each photo is optional; a scene without its photo falls back to the plain brand background. |
 
 **Matching a recorded voiceover:** adjust the pauses in `CHUNKS` inside `timeline.py`, or swap in measured word times, then run `./build.sh`. The captions, scene cuts, on-screen text and sound cues all follow.
 

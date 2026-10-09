@@ -34,6 +34,9 @@
 | `output/nuovadev-reel-2-captions.srt` | The exact subtitles for Version B (§5) |
 | `output/nuovadev-reel-2-cover.png` | The reel cover (§10) |
 | `video2/` | Source: timeline, renderer, soundtrack and cover. `./build.sh` rebuilds everything. |
+| `video2/photos.json` · `fetch_photos.py` | Six photographic backgrounds generated with Figma AI (see below). The renderer uses them automatically once they're downloaded into `video2/assets/photos/`. |
+
+**Photographic backgrounds.** Six photorealistic stills were generated for the reel: a founder at a desk at night (Scene 1), an overhead notebook with an app sketch (Scene 2), a wall of sticky notes (Scene 3), a bright morning desk (Scenes 4 and 7), a user test at a café (Scene 5), and a developer and founder reviewing a laptop (Scene 6). Each sits behind the interface under a brand-coloured gradient, with a slow push-in. Download them with `python3 video2/fetch_photos.py`, which needs network access to www.figma.com, within 7 days of 9 October 2026. Then run `./video2/build.sh`. Until they're downloaded, each scene falls back to the plain brand background.
 
 ---
 
@@ -144,8 +147,8 @@ That lighting change is the live-action version of the ink-to-light shift.
 ### Scene 1: The hook (00:00.00–00:03.03)
 
 **Shot 1A (00:00.00–00:03.03):** a single shot.
-- **Screen content:** a dark panel titled "Build estimate · Product v3" with a "DRAFT" tag. It lists nine rows, each a feature tagged "v1": iOS & Android apps; Web dashboard; Admin panel; Chat & messaging; AI recommendations; Payments & subscriptions; Referral program; Multi-language; Gamification. A totals strip reads "Estimated build: 9 months" and "Budget:" followed by an amount **blurred until unreadable**. No figure is ever legible.
-- **Frame 1** is already tight on the totals strip, with the rows above falling out of focus.
+- **Screen content:** a dark panel titled "Build estimate · Product v3" with a "DRAFT" tag. It lists six rows, each a feature tagged "v1": iOS & Android apps; Web dashboard; Chat & messaging; AI recommendations; Payments & subscriptions; Gamification. A totals strip reads "Estimated build: 9 months" and "Budget:" followed by an amount **blurred until unreadable**. No figure is ever legible.
+- **Frame 1:** the whole estimate card is in frame (x 110–970, y 570–1260), floating over the photo of the founder at night. The top rows are slightly out of focus and the totals strip is sharp. The card drifts up 26 px and grows 3% over the shot.
 - **Subject action:** the founder is visible only as a soft shape behind the screen (Path 1). They scroll the trackpad once, and the scroll stops with "Budget" centred. They stay still: no frown, no head-shake.
 - **AI prompt:** *Cinematic close-up over a laptop screen on a wooden desk at night, warm desk lamp, a founder's face softly out of focus behind the screen, shallow depth of field, slow push-in, photorealistic, 9:16.*
 
@@ -156,10 +159,14 @@ That lighting change is the live-action version of the ink-to-light shift.
 - Margin scribbles and arrows sit at the left and right edges, deliberately illegible so they read as ideas, not words.
 - **Path 1:** the hand enters from frame-right and draws at a natural speed. Speed up 4–6× in the edit so the drawing completes by 04.90.
 
-**Shot 2B (00:04.97–00:06.98): match cut.** The same layout, in exactly the same position in frame, becomes a clean digital wireframe in grey blocks on a dark phone screen. The button now reads "Sign up". A cursor glides from lower-right to the "Sign up" button and stops just short of clicking.
+**Shot 2B (00:04.97–00:06.98): match cut.** The sketch becomes the founder's polished, feature-packed concept, shown on a phone in the same position. The notebook photo behind it blurs and darkens.
+- **The concept app (dark UI):** "Good evening, Sam · THURSDAY · 6 TASKS" with an avatar and a notification bell; an "AI plan for today" card ("Three tasks picked for you, ordered by impact"); four feature tiles (Team chat · 3 NEW, Streak · 12 DAYS, Rewards · 240 PTS, Calendar · SYNCED); two tasks; and a five-tab bar. It should look *brilliant* and ambitious.
+- At "But have you proven" (+0.35 s), an amber sticker lands on the phone at a 6° tilt: **"Not tested with users yet"**.
+- A cursor glides to the AI card and stops.
 
 **Shot 2C (00:06.98–00:08.59): the pause.**
-- Everything holds. The edges darken to about 90%.
+- Everything holds. The edges darken.
+- On "people" (06.50), three grey user bubbles appear around the phone, each with a coral "?" badge. They stand for the users nobody has asked yet.
 - **Path 1:** the founder leans back about 5 cm, takes their hand off the trackpad and looks at the screen without blinking for one beat. A slow push on the eyes.
 - **AI prompt (2C):** *Founder at a desk in warm evening light, leaning back slightly, thoughtful expression looking at a laptop, slow push-in, shallow depth of field, photorealistic.*
 
@@ -171,7 +178,7 @@ That lighting change is the live-action version of the ink-to-light shift.
 | 3B | 11.66–13.05 | Kanban board in perspective. "To do" grows to 10 cards; "In progress" holds 3; "Done" reads "Nothing shipped yet". | Over-the-shoulder; founder's head enters frame-left, out of focus |
 | 3C | 13.05–14.50 | "Development / Month 1 → Month 9" counter. A 12-cell month grid fills coral one cell at a time up to 9. | Founder's eyes flick to the calendar (Path 1 insert) |
 | 3D | 14.50–15.72 | A bar labelled "Budget" grows in the coral-to-amber gradient and **runs past** a marker labelled "Planned". No numbers. | None (clean insert) |
-| 3E | 15.72–18.51 | Five phone mockups fan out. On "will anyone" (16.88) four drift away, leaving one phone showing "Product v3" and a glowing "Launch" button. | Thumb hovers over "Launch" and does not press. Total stillness from 17.77. |
+| 3E | 15.72–18.51 | Five phone mockups fan out. On "will anyone" (16.88) four drift away, leaving one phone showing "Product v3 · LAUNCH CHECKLIST": ✓ 38 features built, ✓ Payments live, ✓ App store listing, ✓ Admin dashboard. Below that, "Tested with real users" with an amber **0**, and a glowing "Launch" button. | Thumb hovers over "Launch" and does not press. Total stillness from 17.77. |
 
 **AI prompt (3B):** *Over-the-shoulder shot of a founder looking at a project board on a monitor, many cards, evening, slow lateral move, shallow depth of field, photorealistic.*
 
@@ -185,7 +192,7 @@ That lighting change is the live-action version of the ink-to-light shift.
 - **Path 1:** daylight. The founder closes extra browser tabs and slides the printed mockups off the desk.
 
 **Shot 4B (00:20.07–00:23.88): the focused prototype.**
-- A phone shows a fictional task app: "Today", the label "ILLUSTRATIVE APP", two tasks, and a "+ New task" button.
+- A phone shows a fictional task app: "Today", the label "ILLUSTRATIVE APP", a dark progress card ("Progress · 0 of 3 done" with a bar), two tasks, a "+ New task" button and a three-tab bar. The progress card updates to "1 of 3 done" when the task is checked off.
 - A small mono label above the phone reads **ILLUSTRATIVE PROTOTYPE**. Keep it, because it stops the app being read as a client project.
 - The sequence: tap "+ New task" (20.42), then the sheet slides up, then "Send investor update" is typed (20.72–21.62), then tap "Add task" (21.87). The new task appears with a coral outline (22.17) and is checked off with a gradient tick (22.87), timed to "one real problem".
 - **AI prompt:** *Close-up of a thumb tapping a smartphone held over a bright desk in daylight, clean minimal scene, shallow depth of field, photorealistic, blank screen.*
@@ -195,7 +202,7 @@ That lighting change is the live-action version of the ink-to-light shift.
 | Beat | Time | Visual | Subject action (Path 1) |
 |---|---|---|---|
 | Build | 23.88 | The prototype assembles block by block: header, then tasks, then button | Insert: the screen building |
-| Test | 24.91 | Three tap ripples: "+ New task", then a task row, then its checkbox | The **test user** holds the phone across a table and taps naturally. The founder watches. |
+| Test | 24.91 | A green-dot tag "LIVE TEST · REAL USER" appears above the phone. Three tap ripples follow: "+ New task", then a task row, then its checkbox. | The **test user** holds the phone across a table and taps naturally. The founder watches. |
 | Learn | 25.95 | A "Feedback" card slides in: ✓ Added a task unaided · ✓ Came back to tick it off · ! Couldn't find reminders | The founder writes in the notebook |
 | Improve | 26.79 | The new-task sheet now includes a highlighted "Remind me" toggle, and the "!" note becomes ✓ "Found reminders" | The founder adjusts the design on the laptop |
 
